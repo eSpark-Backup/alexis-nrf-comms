@@ -261,3 +261,178 @@ Finished building: default.size.stdout
  
 Finished building: Node_STM32l053r8.list
  
+19:58:29 **** Incremental Build of configuration Debug for project Node_STM32l053r8 ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m0plus -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L053xx -c -I"C:/Users/Windows/Desktop/alexis-nrfcomms/Node/Node_STM32l053r8/nRF24L01p" -I../Core/Inc -I../Drivers/STM32L0xx_HAL_Driver/Inc -I../Drivers/STM32L0xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L0xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'HAL_GPIO_EXTI_Callback_Rx':
+../Core/Src/main.c:311:13: warning: implicit declaration of function 'strcmp' [-Wimplicit-function-declaration]
+  311 |         if (strcmp((char*)rx_data, SERVER_MESSAGE) == 0) {
+      |             ^~~~~~
+../Core/Src/main.c:22:1: note: include '<string.h>' or provide a declaration of 'strcmp'
+   21 | #include "nrf24l01p.h"
+  +++ |+#include <string.h>
+   22 | /* Private includes ----------------------------------------------------------*/
+../Core/Src/main.c:313:13: warning: implicit declaration of function 'printf' [-Wimplicit-function-declaration]
+  313 |             printf("Yes, I am awake!\n");
+      |             ^~~~~~
+../Core/Src/main.c:22:1: note: include '<stdio.h>' or provide a declaration of 'printf'
+   21 | #include "nrf24l01p.h"
+  +++ |+#include <stdio.h>
+   22 | /* Private includes ----------------------------------------------------------*/
+../Core/Src/main.c:313:13: warning: incompatible implicit declaration of built-in function 'printf' [-Wbuiltin-declaration-mismatch]
+  313 |             printf("Yes, I am awake!\n");
+      |             ^~~~~~
+../Core/Src/main.c:313:13: note: include '<stdio.h>' or provide a declaration of 'printf'
+arm-none-eabi-gcc -o "Node_STM32l053r8.elf" @"objects.list"   -mcpu=cortex-m0plus -T"C:\Users\Windows\Documents\Github\alexis-nrfcomms\Firmware-Development\Node\Node_STM32l053r8\STM32L053R8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Node_STM32l053r8.map" -Wl,--gc-sections -static -L"C:\Users\Windows\Desktop\alexis-nrfcomms\Node\Node_STM32l053r8\nRF24L01p" --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Node_STM32l053r8.elf
+ 
+arm-none-eabi-size  Node_STM32l053r8.elf 
+arm-none-eabi-objdump -h -S Node_STM32l053r8.elf  > "Node_STM32l053r8.list"
+   text	   data	    bss	    dec	    hex	filename
+  11896	     20	   1748	  13664	   3560	Node_STM32l053r8.elf
+Finished building: default.size.stdout
+ 
+Finished building: Node_STM32l053r8.list
+ 
+19:58:31 **** Build of configuration Debug for project Server_STM32l053r8 ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m0plus -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L053xx -c -I../Core/Inc -I../Drivers/STM32L0xx_HAL_Driver/Inc -I../Drivers/STM32L0xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L0xx/Include -I../Drivers/CMSIS/Include -I"C:/Users/Windows/Desktop/alexis-nrfcomms/Server/Server_STM32l053r8/nRF24L01p" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c:66:45: warning: initializer-string for array of 'unsigned char' is too long
+   66 | uint8_t tx_data[NRF24L01P_PAYLOAD_LENGTH] = "Wake up all Device Nodes";
+      |                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+arm-none-eabi-gcc -o "Server_STM32l053r8.elf" @"objects.list"   -mcpu=cortex-m0plus -T"C:\Users\Windows\Documents\Github\alexis-nrfcomms\Firmware-Development\Server\Server_STM32l053r8\STM32L053R8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Server_STM32l053r8.map" -Wl,--gc-sections -static -L"C:\Users\Windows\Desktop\alexis-nrfcomms\Server\Server_STM32l053r8\nRF24L01p" --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Server_STM32l053r8.elf
+ 
+arm-none-eabi-size  Server_STM32l053r8.elf 
+arm-none-eabi-objdump -h -S Server_STM32l053r8.elf  > "Server_STM32l053r8.list"
+   text	   data	    bss	    dec	    hex	filename
+   8888	     28	   1660	  10576	   2950	Server_STM32l053r8.elf
+Finished building: default.size.stdout
+ 
+Finished building: Server_STM32l053r8.list
+ 
+19:59:24 **** Incremental Build of configuration Debug for project Node_STM32l053r8 ****
+make -j4 all 
+arm-none-eabi-size  Node_STM32l053r8.elf 
+   text	   data	    bss	    dec	    hex	filename
+  11896	     20	   1748	  13664	   3560	Node_STM32l053r8.elf
+Finished building: default.size.stdout
+ 
+19:59:26 **** Incremental Build of configuration Debug for project Node_STM32l053r8 ****
+make -j4 all 
+arm-none-eabi-size  Node_STM32l053r8.elf 
+   text	   data	    bss	    dec	    hex	filename
+  11896	     20	   1748	  13664	   3560	Node_STM32l053r8.elf
+Finished building: default.size.stdout
+ 
+19:59:45 **** Incremental Build of configuration Debug for project Server_STM32l053r8 ****
+make -j4 all 
+arm-none-eabi-size  Server_STM32l053r8.elf 
+   text	   data	    bss	    dec	    hex	filename
+   8888	     28	   1660	  10576	   2950	Server_STM32l053r8.elf
+Finished building: default.size.stdout
+ 
+20:17:17 **** Incremental Build of configuration Debug for project Node_STM32l053r8 ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m0plus -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L053xx -c -I"C:/Users/Windows/Desktop/alexis-nrfcomms/Node/Node_STM32l053r8/nRF24L01p" -I../Core/Inc -I../Drivers/STM32L0xx_HAL_Driver/Inc -I../Drivers/STM32L0xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L0xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'HAL_GPIO_EXTI_Callback_Rx':
+../Core/Src/main.c:311:13: warning: implicit declaration of function 'strcmp' [-Wimplicit-function-declaration]
+  311 |         if (strcmp((char*)rx_data, SERVER_MESSAGE) == 0) {
+      |             ^~~~~~
+../Core/Src/main.c:22:1: note: include '<string.h>' or provide a declaration of 'strcmp'
+   21 | #include "nrf24l01p.h"
+  +++ |+#include <string.h>
+   22 | /* Private includes ----------------------------------------------------------*/
+../Core/Src/main.c:313:13: warning: implicit declaration of function 'printf' [-Wimplicit-function-declaration]
+  313 |             printf("Yes, I am awake!\n");
+      |             ^~~~~~
+../Core/Src/main.c:22:1: note: include '<stdio.h>' or provide a declaration of 'printf'
+   21 | #include "nrf24l01p.h"
+  +++ |+#include <stdio.h>
+   22 | /* Private includes ----------------------------------------------------------*/
+../Core/Src/main.c:313:13: warning: incompatible implicit declaration of built-in function 'printf' [-Wbuiltin-declaration-mismatch]
+  313 |             printf("Yes, I am awake!\n");
+      |             ^~~~~~
+../Core/Src/main.c:313:13: note: include '<stdio.h>' or provide a declaration of 'printf'
+arm-none-eabi-gcc -o "Node_STM32l053r8.elf" @"objects.list"   -mcpu=cortex-m0plus -T"C:\Users\Windows\Documents\Github\alexis-nrfcomms\Firmware-Development\Node\Node_STM32l053r8\STM32L053R8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Node_STM32l053r8.map" -Wl,--gc-sections -static -L"C:\Users\Windows\Desktop\alexis-nrfcomms\Node\Node_STM32l053r8\nRF24L01p" --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Node_STM32l053r8.elf
+ 
+arm-none-eabi-size  Node_STM32l053r8.elf 
+arm-none-eabi-objdump -h -S Node_STM32l053r8.elf  > "Node_STM32l053r8.list"
+   text	   data	    bss	    dec	    hex	filename
+  11884	     24	   1744	  13652	   3554	Node_STM32l053r8.elf
+Finished building: default.size.stdout
+ 
+Finished building: Node_STM32l053r8.list
+ 
+20:17:18 **** Incremental Build of configuration Debug for project Server_STM32l053r8 ****
+make -j4 all 
+arm-none-eabi-size  Server_STM32l053r8.elf 
+   text	   data	    bss	    dec	    hex	filename
+   8888	     28	   1660	  10576	   2950	Server_STM32l053r8.elf
+Finished building: default.size.stdout
+ 
+20:17:44 **** Incremental Build of configuration Debug for project Node_STM32l053r8 ****
+make -j4 all 
+arm-none-eabi-size  Node_STM32l053r8.elf 
+   text	   data	    bss	    dec	    hex	filename
+  11884	     24	   1744	  13652	   3554	Node_STM32l053r8.elf
+Finished building: default.size.stdout
+ 
+20:18:14 **** Incremental Build of configuration Debug for project Server_STM32l053r8 ****
+make -j4 all 
+arm-none-eabi-size  Server_STM32l053r8.elf 
+   text	   data	    bss	    dec	    hex	filename
+   8888	     28	   1660	  10576	   2950	Server_STM32l053r8.elf
+Finished building: default.size.stdout
+ 
+20:21:50 **** Incremental Build of configuration Debug for project Node_STM32l053r8 ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m0plus -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L053xx -c -I"C:/Users/Windows/Desktop/alexis-nrfcomms/Node/Node_STM32l053r8/nRF24L01p" -I../Core/Inc -I../Drivers/STM32L0xx_HAL_Driver/Inc -I../Drivers/STM32L0xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L0xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'HAL_GPIO_EXTI_Callback_Rx':
+../Core/Src/main.c:313:13: warning: implicit declaration of function 'strcmp' [-Wimplicit-function-declaration]
+  313 |         if (strcmp((char*)rx_data, SERVER_MESSAGE) == 0) {
+      |             ^~~~~~
+../Core/Src/main.c:27:1: note: include '<string.h>' or provide a declaration of 'strcmp'
+   26 | #include "nrf24l01p.h"
+  +++ |+#include <string.h>
+   27 | /* USER CODE END Includes */
+../Core/Src/main.c:315:13: warning: implicit declaration of function 'printf' [-Wimplicit-function-declaration]
+  315 |             printf("Yes, I am awake!\n");
+      |             ^~~~~~
+../Core/Src/main.c:27:1: note: include '<stdio.h>' or provide a declaration of 'printf'
+   26 | #include "nrf24l01p.h"
+  +++ |+#include <stdio.h>
+   27 | /* USER CODE END Includes */
+../Core/Src/main.c:315:13: warning: incompatible implicit declaration of built-in function 'printf' [-Wbuiltin-declaration-mismatch]
+  315 |             printf("Yes, I am awake!\n");
+      |             ^~~~~~
+../Core/Src/main.c:315:13: note: include '<stdio.h>' or provide a declaration of 'printf'
+arm-none-eabi-gcc -o "Node_STM32l053r8.elf" @"objects.list"   -mcpu=cortex-m0plus -T"C:\Users\Windows\Documents\Github\alexis-nrfcomms\Firmware-Development\Node\Node_STM32l053r8\STM32L053R8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Node_STM32l053r8.map" -Wl,--gc-sections -static -L"C:\Users\Windows\Desktop\alexis-nrfcomms\Node\Node_STM32l053r8\nRF24L01p" --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Node_STM32l053r8.elf
+ 
+arm-none-eabi-size  Node_STM32l053r8.elf 
+arm-none-eabi-objdump -h -S Node_STM32l053r8.elf  > "Node_STM32l053r8.list"
+   text	   data	    bss	    dec	    hex	filename
+  11884	     24	   1744	  13652	   3554	Node_STM32l053r8.elf
+Finished building: default.size.stdout
+ 
+Finished building: Node_STM32l053r8.list
+ 
+20:21:51 **** Incremental Build of configuration Debug for project Server_STM32l053r8 ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m0plus -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L053xx -c -I../Core/Inc -I../Drivers/STM32L0xx_HAL_Driver/Inc -I../Drivers/STM32L0xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L0xx/Include -I../Drivers/CMSIS/Include -I"C:/Users/Windows/Desktop/alexis-nrfcomms/Server/Server_STM32l053r8/nRF24L01p" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c:68:45: warning: initializer-string for array of 'unsigned char' is too long
+   68 | uint8_t tx_data[NRF24L01P_PAYLOAD_LENGTH] = "Wake up all Device Nodes";
+      |                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+arm-none-eabi-gcc -o "Server_STM32l053r8.elf" @"objects.list"   -mcpu=cortex-m0plus -T"C:\Users\Windows\Documents\Github\alexis-nrfcomms\Firmware-Development\Server\Server_STM32l053r8\STM32L053R8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Server_STM32l053r8.map" -Wl,--gc-sections -static -L"C:\Users\Windows\Desktop\alexis-nrfcomms\Server\Server_STM32l053r8\nRF24L01p" --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Server_STM32l053r8.elf
+ 
+arm-none-eabi-size  Server_STM32l053r8.elf 
+arm-none-eabi-objdump -h -S Server_STM32l053r8.elf  > "Server_STM32l053r8.list"
+   text	   data	    bss	    dec	    hex	filename
+   8888	     32	   1656	  10576	   2950	Server_STM32l053r8.elf
+Finished building: default.size.stdout
+ 
+Finished building: Server_STM32l053r8.list
+ 

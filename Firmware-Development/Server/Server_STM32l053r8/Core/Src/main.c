@@ -21,12 +21,19 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+//follow the given below link
+//https://github.com/mokhwasomssi/stm32_hal_nrf24l01p?tab=readme-ov-file
 #include "nrf24l01p.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
+typedef enum
+{
+    _WakeUp  = 0,
+    _Sleep  = 1
 
+} node_status;
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -57,8 +64,8 @@ static void MX_GPIO_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
-// data array to be sent
-uint8_t tx_data[NRF24L01P_PAYLOAD_LENGTH] = {0, 1, 2, 3, 4, 5, 6, 7};
+// Broadcast message to wake up nodes
+uint8_t tx_data[NRF24L01P_PAYLOAD_LENGTH] = "Wake up all Device Nodes";
 // data array to be read
 uint8_t rx_data[NRF24L01P_PAYLOAD_LENGTH] = { 0, };
 
@@ -66,6 +73,8 @@ uint8_t rx_data[NRF24L01P_PAYLOAD_LENGTH] = { 0, };
 void HAL_GPIO_EXTI_Callback_Tx(uint16_t GPIO_Pin);
 // for rx interrupt
 void HAL_GPIO_EXTI_Callback_Rx(uint16_t GPIO_Pin);
+//node status
+node_status node_current_status = _Sleep;
 /* USER CODE END 0 */
 
 /**
@@ -106,12 +115,9 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-	// change tx datas
-	for(int i= 0; i < 8; i++)
-		tx_data[i]++;
-
 	// transmit
-	nrf24l01p_tx_transmit(tx_data);
+	if(node_current_status != _WakeUp)
+	   nrf24l01p_tx_transmit(tx_data);
 	HAL_Delay(100);
     /* USER CODE BEGIN 3 */
   }
@@ -246,7 +252,11 @@ void HAL_GPIO_EXTI_Callback_Tx(uint16_t GPIO_Pin)
 void HAL_GPIO_EXTI_Callback_Rx(uint16_t GPIO_Pin)
 {
 	if(GPIO_Pin == NRF24L01P_IRQ_PIN_NUMBER)
+	{
 		nrf24l01p_rx_receive(rx_data); // read data when data ready flag is set
+		node_current_status = _WakeUp;
+
+	}
 }
 /* USER CODE END 4 */
 

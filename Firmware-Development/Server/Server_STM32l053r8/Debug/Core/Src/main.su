@@ -1,6 +1,6 @@
-../Core/Src/main.c:75:5:main	16	static
-../Core/Src/main.c:125:6:SystemClock_Config	96	static
-../Core/Src/main.c:174:13:MX_GPIO_Init	56	static
-../Core/Src/main.c:240:6:HAL_GPIO_EXTI_Callback_Tx	16	static
-../Core/Src/main.c:246:6:HAL_GPIO_EXTI_Callback_Rx	16	static
-../Core/Src/main.c:257:6:Error_Handler	8	static,ignoring_inline_asm
+../Core/Src/main.c:84:5:main	8	static
+../Core/Src/main.c:131:6:SystemClock_Config	96	static
+../Core/Src/main.c:180:13:MX_GPIO_Init	56	static
+../Core/Src/main.c:246:6:HAL_GPIO_EXTI_Callback_Tx	16	static
+../Core/Src/main.c:252:6:HAL_GPIO_EXTI_Callback_Rx	16	static
+../Core/Src/main.c:267:6:Error_Handler	8	static,ignoring_inline_asm

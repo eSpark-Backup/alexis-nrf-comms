@@ -18,15 +18,22 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "nrf24l01p.h"
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+//follow the given below link
+//https://github.com/mokhwasomssi/stm32_hal_nrf24l01p?tab=readme-ov-file
+#include "nrf24l01p.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
+typedef enum
+{
+    _WakeUp  = 0,
+    _Sleep  = 1
 
+} node_status;
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -36,7 +43,8 @@
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
-
+#define SERVER_MESSAGE "Wake up all Device Nodes"
+#define SLEEP_STATUS
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
@@ -44,14 +52,18 @@ I2C_HandleTypeDef hi2c2;
 
 
 /* USER CODE BEGIN PV */
-// data array to be sent
-uint8_t tx_data[NRF24L01P_PAYLOAD_LENGTH] = {0, 1, 2, 3, 4, 5, 6, 7};
+
+// Message to send back to the server
+uint8_t ack_msg[] = "25.4,50.4,2,100.2,1";
+
 // data array to be read
 uint8_t rx_data[NRF24L01P_PAYLOAD_LENGTH] = { 0, };
 // for tx interrupt
 void HAL_GPIO_EXTI_Callback_Tx(uint16_t GPIO_Pin);
 // for rx interrupt
 void HAL_GPIO_EXTI_Callback_Rx(uint16_t GPIO_Pin);
+//node status
+node_status node_current_status = _Sleep;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -105,13 +117,16 @@ int main(void)
 	while (1)
 	{
 		/* USER CODE END WHILE */
-		// change tx datas
-		for(int i= 0; i < 8; i++)
-			tx_data[i]++;
-
-		// transmit
-		nrf24l01p_tx_transmit(tx_data);
-		HAL_Delay(100);
+		if (node_current_status == _WakeUp)
+		{
+		    // Perform actions when the system is awake
+		    //Device will wake up here
+		}
+		else if (node_current_status == _Sleep)
+		{
+		    // Perform actions when the system is in sleep mode
+			HAL_PWR_EnterSLEEPMode(PWR_LOWPOWERREGULATOR_ON, PWR_SLEEPENTRY_WFI);
+		}
 	/* USER CODE BEGIN 3 */
 	}
   /* USER CODE END 3 */
@@ -289,10 +304,20 @@ void HAL_GPIO_EXTI_Callback_Tx(uint16_t GPIO_Pin)
 		nrf24l01p_tx_irq(); // clear interrupt flag
 }
 
-void HAL_GPIO_EXTI_Callback_Rx(uint16_t GPIO_Pin)
-{
-	if(GPIO_Pin == NRF24L01P_IRQ_PIN_NUMBER)
-		nrf24l01p_rx_receive(rx_data); // read data when data ready flag is set
+void HAL_GPIO_EXTI_Callback_Rx(uint16_t GPIO_Pin) {
+    if (GPIO_Pin == NRF24L01P_IRQ_PIN_NUMBER) {
+        // Receive the message
+        nrf24l01p_rx_receive(rx_data);
+
+        // Check if the message is the wake-up signal
+        if (strcmp((char*)rx_data, SERVER_MESSAGE) == 0) {
+            // Print wake-up message
+            printf("Yes, I am awake!\n");
+            node_current_status = _WakeUp;
+            // Send acknowledgment message back to the server
+            nrf24l01p_tx_transmit(ack_msg);
+        }
+    }
 }
 /* USER CODE END 4 */
 
