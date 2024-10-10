@@ -1,0 +1,17 @@
+18:01:27 **** Incremental Build of configuration Debug for project Node_STM32l053r8 ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m0plus -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L053xx -c -I"C:/Users/Windows/Desktop/alexis-nrfcomms/Node/Node_STM32l053r8/nRF24L01p" -I../Core/Inc -I../Drivers/STM32L0xx_HAL_Driver/Inc -I../Drivers/STM32L0xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L0xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "Node_STM32l053r8.elf" @"objects.list"   -mcpu=cortex-m0plus -T"C:\Users\Windows\Desktop\alexis-nrfcomms\Node\Node_STM32l053r8\STM32L053R8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Node_STM32l053r8.map" -Wl,--gc-sections -static -L"C:\Users\Windows\Desktop\alexis-nrfcomms\Node\Node_STM32l053r8\nRF24L01p" --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Node_STM32l053r8.elf
+ 
+arm-none-eabi-size  Node_STM32l053r8.elf 
+arm-none-eabi-objdump -h -S Node_STM32l053r8.elf  > "Node_STM32l053r8.list"
+   text	   data	    bss	    dec	    hex	filename
+  12060	     20	   1748	  13828	   3604	Node_STM32l053r8.elf
+Finished building: default.size.stdout
+ 
+Finished building: Node_STM32l053r8.list
+ 
+
+18:01:28 Build Finished. 0 errors, 0 warnings. (took 1s.330ms)
+

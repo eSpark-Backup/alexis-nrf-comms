@@ -1,0 +1,17 @@
+18:58:13 **** Incremental Build of configuration Debug for project Server_STM32l053r8 ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m0plus -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L053xx -c -I../Core/Inc -I../Drivers/STM32L0xx_HAL_Driver/Inc -I../Drivers/STM32L0xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L0xx/Include -I../Drivers/CMSIS/Include -I"C:/Users/Windows/Desktop/alexis-nrfcomms/Server/Server_STM32l053r8/nRF24L01p" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "Server_STM32l053r8.elf" @"objects.list"   -mcpu=cortex-m0plus -T"C:\Users\Windows\Documents\Github\alexis-nrfcomms\Firmware-Development\Server\Server_STM32l053r8\STM32L053R8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Server_STM32l053r8.map" -Wl,--gc-sections -static -L"C:\Users\Windows\Desktop\alexis-nrfcomms\Server\Server_STM32l053r8\nRF24L01p" --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Server_STM32l053r8.elf
+ 
+arm-none-eabi-size  Server_STM32l053r8.elf 
+arm-none-eabi-objdump -h -S Server_STM32l053r8.elf  > "Server_STM32l053r8.list"
+   text	   data	    bss	    dec	    hex	filename
+   8920	     28	   1660	  10608	   2970	Server_STM32l053r8.elf
+Finished building: default.size.stdout
+ 
+Finished building: Server_STM32l053r8.list
+ 
+
+18:58:15 Build Finished. 0 errors, 0 warnings. (took 1s.762ms)
+
