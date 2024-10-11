@@ -1,0 +1,8 @@
+#include"A.hpp"
+
+void A::myFun()
+{
+	while(1)
+	{}
+}
+fadsadsf

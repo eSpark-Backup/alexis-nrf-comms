@@ -1,0 +1,19 @@
+#pragma once
+
+#include "nrf24l01p.h"
+
+
+typedef enum
+{
+    _WakeUp  = 0,
+    _Sleep  = 1
+
+} node_status;
+
+
+class NRF_Transceiver
+{
+private:
+
+public:
+};

@@ -1,0 +1,58 @@
+#include "NRF_Transceiver.hpp"
+#include "spi.h"
+
+void NRF_Transceiver::HAL_GPIO_EXTI_Callback_Tx(uint16_t GPIO_Pin)
+{
+	if(GPIO_Pin == NRF24L01P_IRQ_PIN_NUMBER)
+		nrf24l01p_tx_irq(); // clear interrupt flag
+}
+
+void NRF_Transceiver::HAL_GPIO_EXTI_Callback_Rx(uint16_t GPIO_Pin)
+{
+    if (GPIO_Pin == NRF24L01P_IRQ_PIN_NUMBER)
+    {
+        nrf24l01p_rx_receive(rx_data);
+        if (strcmp((char*)rx_data, SERVER_MESSAGE) == 0)
+        {
+
+            node_current_status = _WakeUp;
+            nrf24l01p_tx_init(2500, _1Mbps); // initialize it to transmit ack data
+            nrf24l01p_tx_transmit(ack_msg);// Send acknowledgment message back to the server
+
+        }
+    }
+}
+
+void NRF_Transceiver::handleWakeUp()
+{
+	  printf("Yes, I am awake!\n");
+}
+
+void NRF_Transceiver::handleSleep()
+{
+    // Perform actions when the system is in sleep mode
+	HAL_PWR_EnableSleepOnExit();
+    HAL_PWR_EnterSLEEPMode(PWR_LOWPOWERREGULATOR_ON, PWR_SLEEPENTRY_WFI);
+    printf("Now,Fall to Sleep!\n");
+}
+
+void NRF_Transceiver::setup()
+{
+	//nrf24l01p_rx_init(2500, _1Mbps);// initialize it to recieve ack data
+    //nrf24l01p_tx_init(2500, _1Mbps);
+	 nrf24l01p_tx_transmit(ack_msg);// Send acknowledgment message back to the server
+
+}
+
+void NRF_Transceiver::loop()
+{
+	switch (node_current_status)
+	{
+		case _WakeUp:
+			handleWakeUp();
+			break;
+		case _Sleep:
+			handleSleep();
+			break;
+	}
+}
