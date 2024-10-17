@@ -1,6 +1,0 @@
-#pragma once
-
-#include "nrf24l01p.h"
-
-
-class

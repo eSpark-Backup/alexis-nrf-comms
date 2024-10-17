@@ -1,4 +1,4 @@
-Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
+Core/Src/main.o: ../Core/Src/main.cpp ../Core/Inc/main.h \
  ../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal.h \
  ../Core/Inc/stm32l0xx_hal_conf.h \
  ../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal_rcc.h \
@@ -26,8 +26,9 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal_pwr.h \
  ../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal_pwr_ex.h \
  ../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal_spi.h \
- C:/Users/Windows/Desktop/alexis-nrfcomms/Server/Server_STM32l053r8/nRF24L01p/nrf24l01p.h \
- ../Core/Inc/spi.h ../Core/Inc/main.h
+ ../Core/Inc/spi.h ../Core/Inc/main.h ../Core/Inc/gpio.h \
+ C:/Users/Windows/Documents/Github/alexis-nrfcomms/Firmware-Development/Server/Server_STM32l053r8/Libraries/NRF_Server_Transceiver/NRF_Server_Transceiver.hpp \
+ C:/Users/Windows/Documents/Github/alexis-nrfcomms/Firmware-Development/Server/Server_STM32l053r8/Libraries/nRF24L01p/nrf24l01p.h
 ../Core/Inc/main.h:
 ../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal.h:
 ../Core/Inc/stm32l0xx_hal_conf.h:
@@ -56,6 +57,8 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal_pwr.h:
 ../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal_pwr_ex.h:
 ../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal_spi.h:
-C:/Users/Windows/Desktop/alexis-nrfcomms/Server/Server_STM32l053r8/nRF24L01p/nrf24l01p.h:
 ../Core/Inc/spi.h:
 ../Core/Inc/main.h:
+../Core/Inc/gpio.h:
+C:/Users/Windows/Documents/Github/alexis-nrfcomms/Firmware-Development/Server/Server_STM32l053r8/Libraries/NRF_Server_Transceiver/NRF_Server_Transceiver.hpp:
+C:/Users/Windows/Documents/Github/alexis-nrfcomms/Firmware-Development/Server/Server_STM32l053r8/Libraries/nRF24L01p/nrf24l01p.h:

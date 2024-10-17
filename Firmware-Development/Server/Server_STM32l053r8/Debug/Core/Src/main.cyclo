@@ -1,6 +1,6 @@
-../Core/Src/main.c:84:5:main	2
-../Core/Src/main.c:131:6:SystemClock_Config	3
-../Core/Src/main.c:180:13:MX_GPIO_Init	1
-../Core/Src/main.c:246:6:HAL_GPIO_EXTI_Callback_Tx	2
-../Core/Src/main.c:252:6:HAL_GPIO_EXTI_Callback_Rx	2
-../Core/Src/main.c:267:6:Error_Handler	1
+C:/Users/Windows/Documents/Github/alexis-nrfcomms/Firmware-Development/Server/Server_STM32l053r8/Libraries/NRF_Server_Transceiver/NRF_Server_Transceiver.hpp:20:7:NRF_Server_Transceiver::NRF_Server_Transceiver()	1
+../Core/Src/main.cpp:66:5:int main()	1
+../Core/Src/main.cpp:113:6:void SystemClock_Config()	3
+../Core/Src/main.cpp:158:6:void Error_Handler()	1
+../Core/Src/main.cpp:167:1:void __static_initialization_and_destruction_0(int, int)	3
+../Core/Src/main.cpp:167:1:cpp)	1

@@ -87,7 +87,7 @@ main-build: Node_STM32l053r8.elf secondary-outputs
 
 # Tool invocations
 Node_STM32l053r8.elf Node_STM32l053r8.map: $(OBJS) $(USER_OBJS) C:\Users\Windows\Documents\Github\alexis-nrfcomms\Firmware-Development\Node\Node_STM32l053r8\STM32L053R8TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-g++ -o "Node_STM32l053r8.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m0plus -T"C:\Users\Windows\Documents\Github\alexis-nrfcomms\Firmware-Development\Node\Node_STM32l053r8\STM32L053R8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Node_STM32l053r8.map" -Wl,--gc-sections -static -L"C:\Users\Windows\Documents\Github\alexis-nrfcomms\Firmware-Development\Node\Node_STM32l053r8\Libraries\nRF24L01p" --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+	arm-none-eabi-g++ -o "Node_STM32l053r8.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m0plus -T"C:\Users\Windows\Documents\Github\alexis-nrfcomms\Firmware-Development\Node\Node_STM32l053r8\STM32L053R8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Node_STM32l053r8.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

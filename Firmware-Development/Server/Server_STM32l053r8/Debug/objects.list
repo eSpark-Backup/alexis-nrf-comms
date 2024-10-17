@@ -1,3 +1,4 @@
+"./Core/Src/gpio.o"
 "./Core/Src/main.o"
 "./Core/Src/spi.o"
 "./Core/Src/stm32l0xx_hal_msp.o"
@@ -23,4 +24,5 @@
 "./Drivers/STM32L0xx_HAL_Driver/Src/stm32l0xx_hal_spi.o"
 "./Drivers/STM32L0xx_HAL_Driver/Src/stm32l0xx_hal_tim.o"
 "./Drivers/STM32L0xx_HAL_Driver/Src/stm32l0xx_hal_tim_ex.o"
-"./nRF24L01p/nrf24l01p.o"
+"./Libraries/NRF_Server_Transceiver/NRF_Server_Transceiver.o"
+"./Libraries/nRF24L01p/nrf24l01p.o"
