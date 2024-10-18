@@ -22,7 +22,6 @@ private:
     uint32_t lastWakeupTime = 0; // To manage wakeup message sending
     uint8_t wakeup_msg[NRF24L01P_PAYLOAD_LENGTH] = "Wake"; // Wakeup message to be sent to nodes
 
-    void setupNodeEnvironment();
     void wakeUpSleepingNodes();
     void sendWakeupMessage(void);
     void receiveAckMessage(void);
@@ -34,8 +33,6 @@ private:
     void removeNode(int index);
 
 public:
-    NRF_Server_Transceiver();  // Constructor without node count
-    ~NRF_Server_Transceiver();
 
     void setup();
     void loop();

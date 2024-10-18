@@ -1,12 +1,6 @@
 #include "../NRF_Server_Transceiver/NRF_Server_Transceiver.hpp"
 #include "spi.h"
 
-NRF_Server_Transceiver::NRF_Server_Transceiver()
-{
-    setupNodeEnvironment(); // Initialize nodes
-}
-
-NRF_Server_Transceiver::~NRF_Server_Transceiver() = default;  // No need for manual memory management
 
 void NRF_Server_Transceiver::setup()
 {
@@ -29,18 +23,6 @@ void NRF_Server_Transceiver::HAL_GPIO_EXTI_Callback_Rx(uint16_t GPIO_Pin)
 {
     if (GPIO_Pin == NRF24L01P_IRQ_PIN_NUMBER)
         receiveAckMessage();
-}
-
-void NRF_Server_Transceiver::setupNodeEnvironment()
-{
-    // Initialize nodes
-	for (size_t i = 0; i < nodes.size(); i++)
-    {
-        nodes[i].id = INVALID_NODE_ID;  // Mark node as unused
-        nodes[i].awake = false;
-        nodes[i].lastAckTime = 0;
-        nodes[i].retryCount = 0;
-    }
 }
 
 void NRF_Server_Transceiver::wakeUpSleepingNodes()
@@ -77,13 +59,10 @@ void NRF_Server_Transceiver::checkNodeTimeouts(void)
     {
         if (nodes[i].awake)
         {
-            // Check if the node has timed out
             if ((currentTime - nodes[i].lastAckTime) > NODE_TIMEOUT)
             {
-                // Increment retry count if node is still alive but missed acknowledgments
                 nodes[i].retryCount++;
 
-                // If the node has exceeded the retry limit, remove it
                 if (nodes[i].retryCount > MAX_RETRIES)
                 {
                     printf("Node with ID %d is no longer active. Removing from environment.\n", nodes[i].id);
