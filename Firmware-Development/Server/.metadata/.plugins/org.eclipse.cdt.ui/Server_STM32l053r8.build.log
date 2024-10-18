@@ -1,20 +1,10 @@
-20:21:51 **** Incremental Build of configuration Debug for project Server_STM32l053r8 ****
+12:30:12 **** Incremental Build of configuration Debug for project Server_STM32l053r8 ****
 make -j4 all 
-arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m0plus -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L053xx -c -I../Core/Inc -I../Drivers/STM32L0xx_HAL_Driver/Inc -I../Drivers/STM32L0xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L0xx/Include -I../Drivers/CMSIS/Include -I"C:/Users/Windows/Desktop/alexis-nrfcomms/Server/Server_STM32l053r8/nRF24L01p" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
-../Core/Src/main.c:68:45: warning: initializer-string for array of 'unsigned char' is too long
-   68 | uint8_t tx_data[NRF24L01P_PAYLOAD_LENGTH] = "Wake up all Device Nodes";
-      |                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~
-arm-none-eabi-gcc -o "Server_STM32l053r8.elf" @"objects.list"   -mcpu=cortex-m0plus -T"C:\Users\Windows\Documents\Github\alexis-nrfcomms\Firmware-Development\Server\Server_STM32l053r8\STM32L053R8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Server_STM32l053r8.map" -Wl,--gc-sections -static -L"C:\Users\Windows\Desktop\alexis-nrfcomms\Server\Server_STM32l053r8\nRF24L01p" --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
-Finished building target: Server_STM32l053r8.elf
- 
 arm-none-eabi-size  Server_STM32l053r8.elf 
-arm-none-eabi-objdump -h -S Server_STM32l053r8.elf  > "Server_STM32l053r8.list"
    text	   data	    bss	    dec	    hex	filename
-   8888	     32	   1656	  10576	   2950	Server_STM32l053r8.elf
+  18064	    120	   2016	  20200	   4ee8	Server_STM32l053r8.elf
 Finished building: default.size.stdout
  
-Finished building: Server_STM32l053r8.list
- 
 
-20:21:52 Build Finished. 0 errors, 1 warnings. (took 934ms)
+12:30:12 Build Finished. 0 errors, 0 warnings. (took 372ms)
 

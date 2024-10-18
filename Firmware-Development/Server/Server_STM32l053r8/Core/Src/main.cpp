@@ -24,7 +24,8 @@
 #include "NRF_Server_Transceiver.hpp"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#define NRF_IRQ_PIN_PORT GPIOC
+#define NRF_IRQ_PIN GPIO_PIN_2  // Adjusted to PC2 for the interrupt pin
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -95,6 +96,7 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   nrfServerTransceiver.setup();
+
   while (1)
   {
 	  nrfServerTransceiver.loop();
@@ -148,6 +150,15 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+// Interrupt callback for handling NRF24L01+ TX/RX interrupts
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+	if (GPIO_Pin == NRF_IRQ_PIN)
+	  {
+		nrfServerTransceiver.HAL_GPIO_EXTI_Callback_Tx(GPIO_Pin);  // TX interrupt
+		nrfServerTransceiver.HAL_GPIO_EXTI_Callback_Rx(GPIO_Pin);  // RX interrup
+	  }
+}
 
 /* USER CODE END 4 */
 

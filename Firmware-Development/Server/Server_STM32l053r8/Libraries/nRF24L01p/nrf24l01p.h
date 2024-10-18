@@ -27,7 +27,7 @@ extern "C" {
 
 // NRF_CE (Chip Enable) on PC4
 #define NRF24L01P_CE_PIN_PORT             GPIOC
-#define NRF24L01P_CE_PIN_NUMBER           GPIO_PIN_4
+#define NRF24L01P_CE_PIN_NUMBER           GPIO_PIN_7
 
 // NRF_INT (Interrupt pin) on PC2
 #define NRF24L01P_IRQ_PIN_PORT            GPIOC

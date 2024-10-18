@@ -1,6 +1,7 @@
-C:/Users/Windows/Documents/Github/alexis-nrfcomms/Firmware-Development/Server/Server_STM32l053r8/Libraries/NRF_Server_Transceiver/NRF_Server_Transceiver.hpp:20:7:NRF_Server_Transceiver::NRF_Server_Transceiver()	16	static
-../Core/Src/main.cpp:66:5:int main()	8	static
-../Core/Src/main.cpp:113:6:void SystemClock_Config()	96	static
-../Core/Src/main.cpp:158:6:void Error_Handler()	8	static,ignoring_inline_asm
-../Core/Src/main.cpp:167:1:void __static_initialization_and_destruction_0(int, int)	16	static
-../Core/Src/main.cpp:167:1:cpp)	8	static
+../Core/Src/main.cpp:67:5:int main()	8	static
+../Core/Src/main.cpp:115:6:void SystemClock_Config()	96	static
+../Core/Src/main.cpp:154:6:void HAL_GPIO_EXTI_Callback(uint16_t)	16	static
+../Core/Src/main.cpp:169:6:void Error_Handler()	8	static,ignoring_inline_asm
+../Core/Src/main.cpp:178:1:void __static_initialization_and_destruction_0(int, int)	16	static
+../Core/Src/main.cpp:178:1:cpp)	8	static
+../Core/Src/main.cpp:178:1:cpp)	8	static
