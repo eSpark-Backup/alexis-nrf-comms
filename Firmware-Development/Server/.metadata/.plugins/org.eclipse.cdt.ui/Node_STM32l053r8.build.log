@@ -1,10 +1,19 @@
-12:30:12 **** Incremental Build of configuration Debug for project Node_STM32l053r8 ****
+17:32:38 **** Incremental Build of configuration Debug for project Node_STM32l053r8 ****
 make -j4 all 
+arm-none-eabi-g++ "../Libraries/NRF_Transceiver/NRF_Transceiver.cpp" -mcpu=cortex-m0plus -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L053xx -c -I../Core/Inc -I../Drivers/STM32L0xx_HAL_Driver/Inc -I../Drivers/STM32L0xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L0xx/Include -I../Drivers/CMSIS/Include -I"C:/Users/Windows/Documents/Github/alexis-nrfcomms/Firmware-Development/Node/Node_STM32l053r8/Libraries/nRF24L01p" -I"C:/Users/Windows/Documents/Github/alexis-nrfcomms/Firmware-Development/Node/Node_STM32l053r8/Libraries/NRF_Transceiver" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Libraries/NRF_Transceiver/NRF_Transceiver.d" -MT"Libraries/NRF_Transceiver/NRF_Transceiver.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Libraries/NRF_Transceiver/NRF_Transceiver.o"
+arm-none-eabi-g++ -o "Node_STM32l053r8.elf" @"objects.list"   -mcpu=cortex-m0plus -T"C:\Users\Windows\Documents\Github\alexis-nrfcomms\Firmware-Development\Node\Node_STM32l053r8\STM32L053R8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Node_STM32l053r8.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -u _printf_float -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+C:/ST/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: C:/ST/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libc_nano.a(libc_a-gettimeofdayr.o): in function `_gettimeofday_r':
+(.text._gettimeofday_r+0xe): warning: _gettimeofday is not implemented and will always fail
+Finished building target: Node_STM32l053r8.elf
+ 
 arm-none-eabi-size  Node_STM32l053r8.elf 
+arm-none-eabi-objdump -h -S Node_STM32l053r8.elf  > "Node_STM32l053r8.list"
    text	   data	    bss	    dec	    hex	filename
-  15488	    144	   2080	  17712	   4530	Node_STM32l053r8.elf
+  36280	    480	   2108	  38868	   97d4	Node_STM32l053r8.elf
 Finished building: default.size.stdout
  
+Finished building: Node_STM32l053r8.list
+ 
 
-12:30:12 Build Finished. 0 errors, 0 warnings. (took 377ms)
+17:32:39 Build Finished. 0 errors, 1 warnings. (took 1s.185ms)
 

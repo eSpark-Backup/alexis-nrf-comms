@@ -1,23 +1,16 @@
 #include "../NRF_Server_Transceiver/NRF_Server_Transceiver.hpp"
 #include "spi.h"
 
-NRF_Server_Transceiver::NRF_Server_Transceiver(int nodeCount)
-    : maxNodes(nodeCount)
+NRF_Server_Transceiver::NRF_Server_Transceiver()
 {
-    // Dynamically allocate memory for the nodes array
-    nodes = new Node[maxNodes];
+    setupNodeEnvironment(); // Initialize nodes
 }
 
-NRF_Server_Transceiver::~NRF_Server_Transceiver()
-{
-    // Free the dynamically allocated memory
-    delete[] nodes;
-}
+NRF_Server_Transceiver::~NRF_Server_Transceiver() = default;  // No need for manual memory management
 
 void NRF_Server_Transceiver::setup()
 {
     nrf24l01p_tx_init(2500, _1Mbps); // initialize it to transmit wake up to all active nodes
-    setupNodeEnvironment();
 }
 
 void NRF_Server_Transceiver::loop()
@@ -41,7 +34,7 @@ void NRF_Server_Transceiver::HAL_GPIO_EXTI_Callback_Rx(uint16_t GPIO_Pin)
 void NRF_Server_Transceiver::setupNodeEnvironment()
 {
     // Initialize nodes
-    for (int i = 0; i < maxNodes; i++)
+	for (size_t i = 0; i < nodes.size(); i++)
     {
         nodes[i].id = INVALID_NODE_ID;  // Mark node as unused
         nodes[i].awake = false;
@@ -80,9 +73,9 @@ void NRF_Server_Transceiver::checkNodeTimeouts(void)
 {
     uint32_t currentTime = getCurrentTime();
 
-    for (int i = 0; i < maxNodes; i++)
+    for (size_t i = 0; i < nodes.size(); i++)
     {
-        if (nodes[i].id != INVALID_NODE_ID && nodes[i].awake)
+        if (nodes[i].awake)
         {
             // Check if the node has timed out
             if ((currentTime - nodes[i].lastAckTime) > NODE_TIMEOUT)
@@ -95,6 +88,7 @@ void NRF_Server_Transceiver::checkNodeTimeouts(void)
                 {
                     printf("Node with ID %d is no longer active. Removing from environment.\n", nodes[i].id);
                     removeNode(i);
+                    i--;
                 }
             }
         }
@@ -108,7 +102,7 @@ uint32_t NRF_Server_Transceiver::getCurrentTime(void)
 
 bool NRF_Server_Transceiver::isNodeExist(uint8_t node_id)
 {
-    for (int i = 0; i < maxNodes; i++)
+	for (size_t i = 0; i < nodes.size(); i++)
     {
         if (nodes[i].id == node_id)
         {
@@ -123,17 +117,14 @@ bool NRF_Server_Transceiver::isNodeExist(uint8_t node_id)
 
 void NRF_Server_Transceiver::addNewNode(uint8_t node_id)
 {
-    for (int i = 0; i < maxNodes; i++)
-    {
-        if (nodes[i].id == INVALID_NODE_ID)  // Assuming INVALID_NODE_ID is a constant representing unused slots
-        {
-            nodes[i].id = node_id;
-            nodes[i].awake = true;
-            nodes[i].lastAckTime = getCurrentTime();
-            printf("New node with ID %d added to environment.\n", node_id);
-            break;
-        }
-    }
+    Node newNode;
+    newNode.id = node_id;
+    newNode.awake = true;
+    newNode.lastAckTime = getCurrentTime();
+    newNode.retryCount = 0;
+
+    nodes.push_back(newNode); // Dynamically add new node
+    printf("New node with ID %d added to environment.\n", node_id);
 }
 
 void NRF_Server_Transceiver::retryWakeUpNode(int nodeId)
@@ -147,23 +138,11 @@ void NRF_Server_Transceiver::retryWakeUpNode(int nodeId)
     else
     {
         printf("Max retries reached for Node %d. Stopping wake-up attempts.\n", nodeId);
-        // Additional logic for unreachable nodes can be added here
     }
 }
 
 void NRF_Server_Transceiver::removeNode(int index)
 {
-    // Shift remaining nodes to fill the gap
-    for (int i = index; i < maxNodes - 1; i++)
-    {
-        nodes[i] = nodes[i + 1];  // Move node at i+1 to i
-    }
-
-    // Clear the last node slot to free up memory
-    nodes[maxNodes - 1].id = INVALID_NODE_ID;
-    nodes[maxNodes - 1].awake = false;
-    nodes[maxNodes - 1].lastAckTime = 0;
-    nodes[maxNodes - 1].retryCount = 0;
-
-    printf("Nodes shifted after removal. Node at index %d removed.\n", index);
+    nodes.erase(nodes.begin() + index);
+    printf("Node at index %d removed. Current node count: %zu\n", index, nodes.size());
 }

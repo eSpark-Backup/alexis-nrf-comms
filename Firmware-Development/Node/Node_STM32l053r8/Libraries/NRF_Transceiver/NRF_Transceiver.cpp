@@ -1,5 +1,8 @@
 #include "NRF_Transceiver.hpp"
 #include "spi.h"
+#include <stdio.h>    // For printf and snprintf
+#include <stdlib.h>   // For rand, srand
+#include <time.h>     // For time to seed rand
 
 void NRF_Transceiver::HAL_GPIO_EXTI_Callback_Tx(uint16_t GPIO_Pin)
 {
@@ -36,9 +39,58 @@ void NRF_Transceiver::handleSleep()
     printf("Now,Fall to Sleep!\n");
 }
 
+void NRF_Transceiver::generateAckMessage(uint8_t ack_msg[20])
+{
+    // Seed the random number generator
+    srand(time(NULL));
+
+    // Generate random values for the message
+    uint8_t node_id = rand() % 256;    // Random node ID between 0 and 255
+    uint16_t value1 = rand() % 1000;   // Random integer between 0 and 999 (scaled 10x for float)
+    uint16_t value2 = rand() % 1000;
+    uint8_t status = rand() % 10;      // Random status between 0 and 9
+    uint16_t value3 = rand() % 10000;  // Random integer between 0 and 9999 (scaled 100x for float)
+    uint8_t flag = rand() % 2;         // Random flag (0 or 1)
+
+    // Fill the ack_msg array (encoding values as needed)
+    ack_msg[0] = node_id;                   // Node ID
+    ack_msg[1] = (uint8_t)(value1 >> 8);    // High byte of value1
+    ack_msg[2] = (uint8_t)(value1 & 0xFF);  // Low byte of value1
+    ack_msg[3] = (uint8_t)(value2 >> 8);    // High byte of value2
+    ack_msg[4] = (uint8_t)(value2 & 0xFF);  // Low byte of value2
+    ack_msg[5] = status;                    // Status
+    ack_msg[6] = (uint8_t)(value3 >> 8);    // High byte of value3
+    ack_msg[7] = (uint8_t)(value3 & 0xFF);  // Low byte of value3
+    ack_msg[8] = flag;                      // Flag
+
+    // Fill the rest of ack_msg with zeros or other data as needed
+    for (int i = 9; i < 20; i++) {
+        ack_msg[i] = 0; // Zero padding for now
+    }
+}
+
+void NRF_Transceiver::interpretAckMessage(uint8_t ack_msg[20])
+{
+    uint16_t value1 = (ack_msg[1] << 8) | ack_msg[2]; // Combine high and low bytes
+    uint16_t value2 = (ack_msg[3] << 8) | ack_msg[4]; // Combine high and low bytes
+    uint8_t status = ack_msg[5];
+    uint16_t value3 = (ack_msg[6] << 8) | ack_msg[7]; // Combine high and low bytes
+    uint8_t flag = ack_msg[8];
+
+    // Convert to floating-point-like values by applying scaling factors
+    float v1 = value1 / 10.0f;  // Scale down by 10
+    float v2 = value2 / 10.0f;  // Scale down by 10
+    float v3 = value3 / 100.0f; // Scale down by 100
+
+    // Print the interpreted values
+    printf("Interpreted message: {%.1f, %.1f, %d, %.2f, %d}\n", v1, v2, status, v3, flag);
+}
+
 void NRF_Transceiver::setup()
 {
 	nrf24l01p_rx_init(2500, _1Mbps); //initialize it to recieve ack data
+	generateAckMessage(ack_msg);
+	interpretAckMessage(ack_msg);
 }
 
 void NRF_Transceiver::loop()

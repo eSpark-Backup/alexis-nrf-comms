@@ -1,6 +1,7 @@
 #pragma once
 #include <cstring>
 #include <cstdio>
+#include <vector>          // Include the vector header
 #include "nrf24l01p.h"
 
 #define NODE_TIMEOUT 10000
@@ -17,10 +18,9 @@ struct Node {
 class NRF_Server_Transceiver
 {
 private:
-    Node* nodes;
+    std::vector<Node> nodes; // Use vector for dynamic sizing
     uint32_t lastWakeupTime = 0; // To manage wakeup message sending
-    uint8_t wakeup_msg[NRF24L01P_PAYLOAD_LENGTH] = {0, 1, 2, 3, 4, 5, 6, 7}; // Wakeup message to be sent to nodes
-    int maxNodes;           // Maximum number of nodes (can be set dynamically)
+    uint8_t wakeup_msg[NRF24L01P_PAYLOAD_LENGTH] = "Wake"; // Wakeup message to be sent to nodes
 
     void setupNodeEnvironment();
     void wakeUpSleepingNodes();
@@ -34,8 +34,8 @@ private:
     void removeNode(int index);
 
 public:
-    NRF_Server_Transceiver(int nodeCount = 10);  // Constructor with dynamic size option
-    ~NRF_Server_Transceiver();  // Destructor to clean up dynamic memory
+    NRF_Server_Transceiver();  // Constructor without node count
+    ~NRF_Server_Transceiver();
 
     void setup();
     void loop();
