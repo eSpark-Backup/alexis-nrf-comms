@@ -1,0 +1,137 @@
+#include "../NRF_Server_Transceiver/NRF_Server_Transceiver.hpp"
+#include "spi.h"
+#define TX_DS(status) (status &= 0x20)
+#define RX_DS(status) (status &= 0x40)
+
+void NRF_Server_Transceiver::setup()
+{
+    nrf24l01p_tx_init(2500, _1Mbps); // initialize it to transmit wake up to all active nodes
+}
+
+void NRF_Server_Transceiver::loop()
+{
+    wakeUpSleepingNodes();
+    checkNodeTimeouts();
+}
+
+void NRF_Server_Transceiver::HAL_GPIO_EXTI_Callback_Tx()
+{
+        nrf24l01p_tx_irq(); // clear interrupt flag
+}
+
+void NRF_Server_Transceiver::HAL_GPIO_EXTI_Callback_Rx()
+{
+        receiveAckMessage();
+}
+
+void NRF_Server_Transceiver::Rx_Tx_Callback_Handler()
+{
+	uint8_t status = nrf24l01p_get_status();
+	tx_ds &= 0x20;
+
+	if(status == TX_DS(status))
+		HAL_GPIO_EXTI_Callback_Tx();
+
+    if (status == RX_DS(status))
+		HAL_GPIO_EXTI_Callback_Rx();
+}
+void NRF_Server_Transceiver::wakeUpSleepingNodes()
+{
+    if (getCurrentTime() - lastWakeupTime > 5000)
+    {
+        sendWakeupMessage();
+        lastWakeupTime = getCurrentTime();
+    }
+}
+
+void NRF_Server_Transceiver::sendWakeupMessage(void)
+{
+    nrf24l01p_tx_transmit(wakeup_msg);
+}
+
+void NRF_Server_Transceiver::receiveAckMessage(void)
+{
+    uint8_t rx_data[32];
+    nrf24l01p_rx_receive(rx_data);
+
+    // If the node does not exist, assign it a new slot
+    if (!isNodeExist(rx_data[0]))
+    {
+        addNewNode(rx_data[0]);
+    }
+}
+
+void NRF_Server_Transceiver::checkNodeTimeouts(void)
+{
+    uint32_t currentTime = getCurrentTime();
+
+    for (size_t i = 0; i < nodes.size(); i++)
+    {
+        if (nodes[i].awake)
+        {
+            if ((currentTime - nodes[i].lastAckTime) > NODE_TIMEOUT)
+            {
+                nodes[i].retryCount++;
+
+                if (nodes[i].retryCount > MAX_RETRIES)
+                {
+                    printf("Node with ID %f is no longer active. Removing from environment.\n", nodes[i].id);
+                    removeNode(i);
+                    i--;
+                }
+            }
+        }
+    }
+}
+
+uint32_t NRF_Server_Transceiver::getCurrentTime(void)
+{
+    return HAL_GetTick();
+}
+
+bool NRF_Server_Transceiver::isNodeExist(uint8_t node_id)
+{
+	for (size_t i = 0; i < nodes.size(); i++)
+    {
+        if (nodes[i].id == node_id)
+        {
+            // Node exists, update its state and ack time
+            nodes[i].awake = true;
+            nodes[i].lastAckTime = getCurrentTime();
+            return true;
+        }
+    }
+    return false;
+}
+
+void NRF_Server_Transceiver::addNewNode(uint8_t node_id)
+{
+    Node newNode;
+    newNode.id = node_id;
+    newNode.awake = true;
+    newNode.lastAckTime = getCurrentTime();
+    newNode.retryCount = 0;
+
+    nodes.push_back(newNode); // Dynamically add new node
+    printf("New node with ID %f added to environment.\n", node_id);
+}
+
+void NRF_Server_Transceiver::retryWakeUpNode(int nodeId)
+{
+    if (nodes[nodeId].retryCount < MAX_RETRIES)
+    {
+        printf("Retrying wake-up for Node %f (Attempt %d)\n", nodeId, nodes[nodeId].retryCount + 1);
+        nrf24l01p_tx_transmit(wakeup_msg);  // Send wake-up message
+        nodes[nodeId].retryCount++;  // Increment retry count
+    }
+    else
+    {
+        printf("Max retries reached for Node %f. Stopping wake-up attempts.\n", nodeId);
+    }
+}
+
+void NRF_Server_Transceiver::removeNode(int index)
+{
+    nodes.erase(nodes.begin() + index);
+    printf("Node at index %f removed. Current node count: %zu\n", index, nodes.size());
+}

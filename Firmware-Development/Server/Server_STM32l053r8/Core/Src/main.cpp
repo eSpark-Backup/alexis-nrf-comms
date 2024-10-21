@@ -21,7 +21,7 @@
 #include "spi.h"
 #include "gpio.h"
 
-#include "NRF_Server_Transceiver.hpp"
+#include "Operation.hpp"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #define NRF_IRQ_PIN_PORT GPIOC
@@ -57,7 +57,7 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-NRF_Server_Transceiver nrfServerTransceiver;
+Operation opt;
 /* USER CODE END 0 */
 
 /**
@@ -95,11 +95,11 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  nrfServerTransceiver.setup();
+  opt.setup();
 
   while (1)
   {
-	  nrfServerTransceiver.loop();
+	  opt.loop();
 
     /* USER CODE END WHILE */
 
@@ -155,8 +155,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
 	if (GPIO_Pin == NRF_IRQ_PIN)
 	  {
-		nrfServerTransceiver.HAL_GPIO_EXTI_Callback_Tx(GPIO_Pin);  // TX interrupt
-		nrfServerTransceiver.HAL_GPIO_EXTI_Callback_Rx(GPIO_Pin);  // RX interrup
+		opt.Rx_Tx_Callback_Handler();
 	  }
 }
 

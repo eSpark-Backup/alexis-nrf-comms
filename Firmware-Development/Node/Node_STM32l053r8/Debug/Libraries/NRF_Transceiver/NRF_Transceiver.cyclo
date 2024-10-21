@@ -1,8 +1,0 @@
-../Libraries/NRF_Transceiver/NRF_Transceiver.cpp:7:6:void NRF_Transceiver::HAL_GPIO_EXTI_Callback_Tx(uint16_t)	2
-../Libraries/NRF_Transceiver/NRF_Transceiver.cpp:13:6:void NRF_Transceiver::HAL_GPIO_EXTI_Callback_Rx(uint16_t)	3
-../Libraries/NRF_Transceiver/NRF_Transceiver.cpp:29:6:void NRF_Transceiver::handleWakeUp()	1
-../Libraries/NRF_Transceiver/NRF_Transceiver.cpp:34:6:void NRF_Transceiver::handleSleep()	1
-../Libraries/NRF_Transceiver/NRF_Transceiver.cpp:42:6:void NRF_Transceiver::generateAckMessage(uint8_t*)	4
-../Libraries/NRF_Transceiver/NRF_Transceiver.cpp:72:6:void NRF_Transceiver::interpretAckMessage(uint8_t*)	1
-../Libraries/NRF_Transceiver/NRF_Transceiver.cpp:89:6:void NRF_Transceiver::setup()	1
-../Libraries/NRF_Transceiver/NRF_Transceiver.cpp:96:6:void NRF_Transceiver::loop()	3

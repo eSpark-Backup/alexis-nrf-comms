@@ -1,7 +1,0 @@
-C:/Users/Windows/Documents/Github/alexis-nrfcomms/Firmware-Development/Node/Node_STM32l053r8/Libraries/NRF_Transceiver/NRF_Transceiver.hpp:17:7:NRF_Transceiver::NRF_Transceiver()	1
-../Core/Src/main.cpp:71:5:int main()	1
-../Core/Src/main.cpp:118:6:void SystemClock_Config()	3
-../Core/Src/main.cpp:156:6:void HAL_GPIO_EXTI_Callback(uint16_t)	2
-../Core/Src/main.cpp:170:6:void Error_Handler()	1
-../Core/Src/main.cpp:179:1:void __static_initialization_and_destruction_0(int, int)	3
-../Core/Src/main.cpp:179:1:cpp)	1

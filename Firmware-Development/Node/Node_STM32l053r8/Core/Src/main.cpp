@@ -21,7 +21,8 @@
 #include "i2c.h"
 #include "spi.h"
 #include "gpio.h"
-#include "NRF_Transceiver.hpp"
+
+#include "Operation.hpp"
 
 
 /* Private includes ----------------------------------------------------------*/
@@ -59,13 +60,13 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-NRF_Transceiver nrfTransceiver;
+Operation opt;
 #define NRF_IRQ_PIN_PORT GPIOC
 #define NRF_IRQ_PIN GPIO_PIN_2  // Adjusted to PC2 for the interrupt pin
 /* USER CODE END 0 */
 
 /**
-  * @brief  The application entry point.
+  * @brief  The optlication entry point.
   * @retval int
   */
 int main(void)
@@ -100,10 +101,10 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  nrfTransceiver.setup();
+  opt.setup();
   while (1)
   {
-	  nrfTransceiver.loop();
+//	  opt.loop();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -153,13 +154,13 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+// Interrupt callback for handling NRF24L01+ TX/RX interrupts
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
 	if (GPIO_Pin == NRF_IRQ_PIN)
-	{
-		nrfTransceiver.HAL_GPIO_EXTI_Callback_Tx(GPIO_Pin);  // TX interrupt
-		nrfTransceiver.HAL_GPIO_EXTI_Callback_Rx(GPIO_Pin);  // RX interrup
-	}
+	  {
+		opt.Rx_Tx_Callback_Handler();
+	  }
 }
 /* USER CODE END 4 */
 

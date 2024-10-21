@@ -1,0 +1,9 @@
+../Application/Operation/Operation.cpp:11:6:void Operation::HAL_GPIO_EXTI_Callback_Tx()	1
+../Application/Operation/Operation.cpp:16:6:void Operation::HAL_GPIO_EXTI_Callback_Rx()	2
+../Application/Operation/Operation.cpp:30:6:void Operation::Rx_Tx_Callback_Handler()	3
+../Application/Operation/Operation.cpp:49:14:nrf_status_t Operation::getNrfStatus()	3
+../Application/Operation/Operation.cpp:66:6:void Operation::handleWakeUp()	1
+../Application/Operation/Operation.cpp:71:6:void Operation::handleSleep()	1
+../Application/Operation/Operation.cpp:78:6:void Operation::generateAckMessage(char*, size_t)	1
+../Application/Operation/Operation.cpp:89:6:void Operation::setup()	1
+../Application/Operation/Operation.cpp:96:6:void Operation::loop()	3
