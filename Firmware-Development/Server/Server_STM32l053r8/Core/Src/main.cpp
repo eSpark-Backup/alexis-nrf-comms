@@ -1,4 +1,4 @@
- /* USER CODE BEGIN Header */
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file           : main.c
@@ -19,6 +19,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "spi.h"
+#include "usart.h"
 #include "gpio.h"
 
 #include "Operation.hpp"
@@ -62,8 +63,7 @@ Operation opt;
 
 /**
   * @brief  The application entry point.
-  * @retval int
-  */
+  * @retval int*/
 int main(void)
 {
   /* USER CODE BEGIN 1 */
@@ -89,18 +89,16 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_SPI1_Init();
+  MX_USART1_UART_Init();
+  MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
 
-  /* USER CODE END 2 */
-
-  /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  opt.setup();
+    opt.setup();
 
-  while (1)
-  {
-	  opt.loop();
-
+    while (1)
+    {
+  	  opt.loop();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -116,6 +114,7 @@ void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+  RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
 
   /** Configure the main internal regulator output voltage
   */
@@ -147,6 +146,13 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USART1|RCC_PERIPHCLK_USART2;
+  PeriphClkInit.Usart1ClockSelection = RCC_USART1CLKSOURCE_PCLK2;
+  PeriphClkInit.Usart2ClockSelection = RCC_USART2CLKSOURCE_PCLK1;
+  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
+  {
+    Error_Handler();
+  }
 }
 
 /* USER CODE BEGIN 4 */
@@ -158,7 +164,6 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 		opt.Rx_Tx_Callback_Handler();
 	  }
 }
-
 /* USER CODE END 4 */
 
 /**

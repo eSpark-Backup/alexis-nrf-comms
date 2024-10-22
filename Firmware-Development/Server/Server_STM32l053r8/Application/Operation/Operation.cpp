@@ -1,6 +1,6 @@
 #include "Operation.hpp"
 #include "spi.h"
-
+#include "usart.h"
 
 void Operation::setup()
 {
@@ -69,15 +69,18 @@ void Operation::wakeUpSleepingNodes()
 
 void Operation::sendWakeupMessage(void)
 {
+    char msg[50];
+    snprintf(msg, sizeof(msg), "Server send %s\n", wakeup_msg);  // Format message to include wakeup_msg
+    HAL_UART_Transmit(&huart2, (uint8_t*)msg, strlen(msg), 100);
     nrf24l01p_tx_transmit(wakeup_msg);
 }
+
 
 void Operation::receiveAckMessage(void)
 {
     uint8_t rx_data[32];
     nrf24l01p_rx_receive(rx_data);
 
-    // If the node does not exist, assign it a new slot
     if (!isNodeExist(rx_data[0]))
     {
         addNewNode(rx_data[0]);
@@ -87,19 +90,28 @@ void Operation::receiveAckMessage(void)
 void Operation::checkNodeTimeouts(void)
 {
     uint32_t currentTime = getCurrentTime();
-	nodeCount = 0;
+    nodeCount = 0;
+    char msg[100];  // Buffer for UART messages
+
     for (size_t i = 0; i < nodes.size(); i++)
     {
         if (nodes[i].awake)
-           nodeCount++;
+            nodeCount++;
 
-        printf("Node ID : %d error : \n", nodes[i].id);
+        snprintf(msg, sizeof(msg), "Node ID: %d, error: \n", nodes[i].id);
+        HAL_UART_Transmit(&huart2, (uint8_t*)msg, strlen(msg), 100);
     }
-    if(nodeCount != DEFAULT_NODE_QUANTITY)
-    	printf("Connected Nodes are : %d\n", nodeCount);
-    else
-    	printf("All Nodes are present\n");
 
+    if (nodeCount != DEFAULT_NODE_QUANTITY)
+    {
+        snprintf(msg, sizeof(msg), "Connected Nodes are: %d\n", nodeCount);
+        HAL_UART_Transmit(&huart2, (uint8_t*)msg, strlen(msg), 100);
+    }
+    else
+    {
+        snprintf(msg, sizeof(msg), "All Nodes are present\n");
+        HAL_UART_Transmit(&huart2, (uint8_t*)msg, strlen(msg), 100);
+    }
 }
 
 uint32_t Operation::getCurrentTime(void)
@@ -130,27 +142,37 @@ void Operation::addNewNode(uint8_t node_id)
     newNode.lastAckTime = getCurrentTime();
     newNode.retryCount = 0;
 
-    nodes.push_back(newNode); // Dynamically add new node
-    printf("New node with ID %f added to environment.\n", node_id);
+    nodes.push_back(newNode);
+
+    char msg[100];
+    snprintf(msg, sizeof(msg), "New node with ID %d added to environment.\n", node_id);
+    HAL_UART_Transmit(&huart2, (uint8_t*)msg, strlen(msg), 100);
 }
 
 void Operation::retryWakeUpNode(int nodeId)
 {
+    char msg[100];
+
     if (nodes[nodeId].retryCount < MAX_RETRIES)
     {
-        printf("Retrying wake-up for Node %f (Attempt %d)\n", nodeId, nodes[nodeId].retryCount + 1);
-        nrf24l01p_tx_transmit(wakeup_msg);  // Send wake-up message
-        nodes[nodeId].retryCount++;  // Increment retry count
+        snprintf(msg, sizeof(msg), "Retrying wake-up for Node %d (Attempt %d)\n", nodeId, nodes[nodeId].retryCount + 1);
+        HAL_UART_Transmit(&huart2, (uint8_t*)msg, strlen(msg), 100);
+
+        nrf24l01p_tx_transmit(wakeup_msg);
+        nodes[nodeId].retryCount++;
     }
     else
     {
-        printf("Max retries reached for Node %f. Stopping wake-up attempts.\n", nodeId);
+        snprintf(msg, sizeof(msg), "Max retries reached for Node %d. Stopping wake-up attempts.\n", nodeId);
+        HAL_UART_Transmit(&huart2, (uint8_t*)msg, strlen(msg), 100);
     }
 }
 
 void Operation::removeNode(int index)
 {
     nodes.erase(nodes.begin() + index);
-    printf("Node at index %f removed. Current node count: %zu\n", index, nodes.size());
 
+    char msg[100];
+    snprintf(msg, sizeof(msg), "Node at index %d removed. Current node count: %zu\n", index, nodes.size());
+    HAL_UART_Transmit(&huart2, (uint8_t*)msg, strlen(msg), 100);
 }
