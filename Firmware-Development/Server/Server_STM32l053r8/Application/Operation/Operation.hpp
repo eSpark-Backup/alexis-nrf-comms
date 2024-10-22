@@ -19,8 +19,8 @@ struct Node
 
 typedef enum
 {
-    TX_DONE = 0,
-    RX_DONE = 1,
+    Transmiter = 0,
+    Receiver = 1,
 	DEFAULT
 } nrf_status_t;
 
@@ -32,15 +32,15 @@ private:
     int nodeCount = 0;
     uint32_t lastWakeupTime = 0; // To manage wakeup message sending
     uint8_t wakeup_msg[NRF24L01P_PAYLOAD_LENGTH] = "Wake"; // Wakeup message to be sent to nodes
+    char msg[150];
 
     void wakeUpSleepingNodes();
     void sendWakeupMessage(void);
     void receiveAckMessage(void);
-    void checkNodeTimeouts(void);
+    bool checkNodeTimeouts(void);
     uint32_t getCurrentTime(void);
     bool isNodeExist(uint8_t node_id[12]);
     void addNewNode(uint8_t node_id[12]);
-    void retryWakeUpNode(int nodeId);
     nrf_status_t getNrfStatus();
     void HAL_GPIO_EXTI_Callback_Tx(); // for tx interrupt
     void HAL_GPIO_EXTI_Callback_Rx(); // for rx interrupt
@@ -48,6 +48,6 @@ private:
 public:
 
     void setup();
-    void loop();
+    bool loop();
     void Rx_Tx_Callback_Handler();
 };

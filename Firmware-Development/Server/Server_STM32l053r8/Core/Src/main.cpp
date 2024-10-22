@@ -94,15 +94,15 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
   /* USER CODE BEGIN WHILE */
-    opt.setup();
-
+   opt.setup();
     while (1)
     {
-  	  opt.loop();
+  	  if(opt.loop())
+  		  break;
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-  }
+    }
   /* USER CODE END 3 */
 }
 

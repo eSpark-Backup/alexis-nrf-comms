@@ -85,8 +85,7 @@ void nrf24l01p_power_down();
 uint8_t nrf24l01p_get_status();
 uint8_t nrf24l01p_get_fifo_status();
 
-uint8_t get_Rx_Config();
-uint8_t get_Tx_Config();
+uint8_t nrf24l01p_get_rx_tx_mode();
 // Static payload lengths
 void nrf24l01p_rx_set_payload_widths(widths bytes);
 

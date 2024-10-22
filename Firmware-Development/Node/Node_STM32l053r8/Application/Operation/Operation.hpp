@@ -12,8 +12,8 @@
 
 typedef enum
 {
-    TX_DONE = 0,
-    RX_DONE = 1,
+    Transmiter = 0,
+    Receiver = 1,
 	DEFAULT
 } nrf_status_t;
 

@@ -4,13 +4,16 @@
 
 void Operation::setup()
 {
-    nrf24l01p_tx_init(2500, _1Mbps); // initialize it to transmit wake up to all active nodes
+	 nrf24l01p_tx_init(2500, _1Mbps);// Re-initialize to Transmit data
+	 sendWakeupMessage();
 }
 
-void Operation::loop()
+bool Operation::loop()
 {
     wakeUpSleepingNodes();
-    checkNodeTimeouts();
+    if(checkNodeTimeouts())
+    	return true;
+    return false;
 }
 
 void Operation::HAL_GPIO_EXTI_Callback_Tx()
@@ -29,11 +32,11 @@ void Operation::Rx_Tx_Callback_Handler()
 
     switch (currentStatus)
     {
-        case TX_DONE:
+        case Transmiter:
             HAL_GPIO_EXTI_Callback_Tx();
             break;
 
-        case RX_DONE:
+        case Receiver:
             HAL_GPIO_EXTI_Callback_Rx();
             break;
 
@@ -44,21 +47,17 @@ void Operation::Rx_Tx_Callback_Handler()
 
 nrf_status_t Operation::getNrfStatus()
 {
-    if (get_Tx_Config() == 0x00)
-    {
-        return TX_DONE;
-    }
-    else if (get_Rx_Config() == 0x01)
-    {
-        return RX_DONE;
-    }
-    return DEFAULT;
+    if (nrf24l01p_get_rx_tx_mode())
+    	return Receiver;
+    else
+        return Transmiter;
 }
 
 void Operation::wakeUpSleepingNodes()
 {
     if (getCurrentTime() - lastWakeupTime > BROADCAST_PERIOD)  //Time Difference between 1st and 2nd broadcast will be 10sec and during this period device will be receiving data from nodes
     {
+        nrf24l01p_tx_init(2500, _1Mbps);// Re-initialize to Transmit data
         sendWakeupMessage();
         lastWakeupTime = getCurrentTime();
     }
@@ -66,7 +65,6 @@ void Operation::wakeUpSleepingNodes()
 
 void Operation::sendWakeupMessage(void)
 {
-    char msg[50];
     snprintf(msg, sizeof(msg), "Server send %s\n", wakeup_msg);  // Format message to include wakeup_msg
     HAL_UART_Transmit(&huart2, (uint8_t*)msg, strlen(msg), 100);
     nrf24l01p_tx_transmit(wakeup_msg);
@@ -82,10 +80,9 @@ void Operation::receiveAckMessage(void)
     {
         addNewNode(rx_data);
     }
-    nrf24l01p_tx_init(2500, _1Mbps);// Re-initialize to Transmit data
 }
 
-void Operation::checkNodeTimeouts(void)
+bool Operation::checkNodeTimeouts(void)
 {
     uint32_t currentTime = getCurrentTime();
     nodeCount = 0;
@@ -109,7 +106,10 @@ void Operation::checkNodeTimeouts(void)
     {
         snprintf(msg, sizeof(msg), "All Nodes are present\n");
         HAL_UART_Transmit(&huart2, (uint8_t*)msg, strlen(msg), 100);
+        return true;
     }
+
+    return false;
 }
 
 uint32_t Operation::getCurrentTime(void)
@@ -143,27 +143,8 @@ void Operation::addNewNode(uint8_t node_id[12])
 
     nodes.push_back(newNode);
 
-    char msg[150];
-    snprintf(msg, sizeof(msg), "New node added with ID: %u %u %u\n", node_id[0], node_id[1], node_id[2]);
-    HAL_UART_Transmit(&huart2, (uint8_t*)msg, strlen(msg), 100);
+    uint16_t len = snprintf(msg, sizeof(msg), "New node added with ID: %u %u %u\n", node_id[0], node_id[1], node_id[2]);
+    HAL_UART_Transmit(&huart2, (uint8_t*)msg, len, 100);
 }
 
-void Operation::retryWakeUpNode(int nodeId)
-{
-    char msg[100];
-
-    if (nodes[nodeId].retryCount < MAX_RETRIES)
-    {
-        snprintf(msg, sizeof(msg), "Retrying wake-up for Node %d (Attempt %d)\n", nodeId, nodes[nodeId].retryCount + 1);
-        HAL_UART_Transmit(&huart2, (uint8_t*)msg, strlen(msg), 100);
-
-        nrf24l01p_tx_transmit(wakeup_msg);
-        nodes[nodeId].retryCount++;
-    }
-    else
-    {
-        snprintf(msg, sizeof(msg), "Max retries reached for Node %d. Stopping wake-up attempts.\n", nodeId);
-        HAL_UART_Transmit(&huart2, (uint8_t*)msg, strlen(msg), 100);
-    }
-}
 

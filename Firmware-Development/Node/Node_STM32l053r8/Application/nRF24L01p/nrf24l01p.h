@@ -78,8 +78,7 @@ void nrf24l01p_reset();
 void nrf24l01p_prx_mode();
 void nrf24l01p_ptx_mode();
 
-uint8_t get_Rx_Config();
-uint8_t get_Tx_Config();
+uint8_t nrf24l01p_get_rx_tx_mode();
 
 void nrf24l01p_power_up();
 void nrf24l01p_power_down();
