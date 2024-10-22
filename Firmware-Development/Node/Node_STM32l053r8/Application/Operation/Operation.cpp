@@ -52,25 +52,15 @@ void Operation::Rx_Tx_Callback_Handler()
 
 nrf_status_t Operation::getNrfStatus()
 {
-    uint8_t status = nrf24l01p_get_status();
-
-    if (TX_DS(status) == 0x20)
+    if (get_Tx_Config() == 0x00)
     {
         return TX_DONE;
     }
-    else if (RX_DS(status) == 0x40)
+    else if (get_Rx_Config() == 0x01)
     {
         return RX_DONE;
     }
-
-    return TX_DONE;
-}
-
-void Operation::handleWakeUp()
-{
-    char msg[50];
-    snprintf(msg, sizeof(msg), "Yes, I am awake!\n");
-    HAL_UART_Transmit(&huart2, (uint8_t*)msg, strlen(msg), 100);
+    return DEFAULT;
 }
 
 void Operation::generateAckMessage()
@@ -85,8 +75,6 @@ void Operation::generateAckMessage()
 
     ack_msg.resize(totalSize);
     memcpy(ack_msg.data(), uid, sizeof(uid));
-    memcpy(ack_msg.data() + sizeof(uid), message.c_str(), message.size());
-    ack_msg[sizeof(uid) + message.size()] = '\0';
 }
 
 void Operation::setup()
@@ -94,8 +82,7 @@ void Operation::setup()
     nrf24l01p_rx_init(2500, _1Mbps); // Initialize to receive data
     generateAckMessage();
     HAL_PWR_EnableSleepOnExit();
-
-    // Send message via UART2 to indicate setup is complete
+   	HAL_PWR_EnterSLEEPMode(PWR_MAINREGULATOR_ON, PWR_SLEEPENTRY_WFI);
     const char *setupMsg = "Setup complete, ready to receive data.\n";
     HAL_UART_Transmit(&huart2, (uint8_t*)setupMsg, strlen(setupMsg), 100);
 }

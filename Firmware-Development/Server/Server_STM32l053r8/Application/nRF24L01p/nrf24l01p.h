@@ -34,7 +34,7 @@ extern "C" {
 #define NRF24L01P_IRQ_PIN_NUMBER          GPIO_PIN_2
 
 // Keep the payload length as it is unless you want to change the size
-#define NRF24L01P_PAYLOAD_LENGTH          8     // 1 - 32 bytes
+#define NRF24L01P_PAYLOAD_LENGTH          16     // 1 - 32 bytes
 
 
 
@@ -44,6 +44,7 @@ typedef uint8_t widths;
 typedef uint8_t length;
 typedef uint16_t delay;
 typedef uint16_t channel;
+
 
 typedef enum
 {
@@ -84,6 +85,8 @@ void nrf24l01p_power_down();
 uint8_t nrf24l01p_get_status();
 uint8_t nrf24l01p_get_fifo_status();
 
+uint8_t get_Rx_Config();
+uint8_t get_Tx_Config();
 // Static payload lengths
 void nrf24l01p_rx_set_payload_widths(widths bytes);
 

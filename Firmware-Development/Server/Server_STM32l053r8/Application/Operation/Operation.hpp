@@ -8,12 +8,10 @@
 #define BROADCAST_PERIOD 10000
 #define DEFAULT_NODE_QUANTITY 5
 #define MAX_RETRIES 10
-#define TX_DS(status) (status &= 0x20)
-#define RX_DS(status) (status &= 0x40)
 
 struct Node
 {
-    uint8_t id;             // Node ID, initialized to INVALID_NODE_ID
+    uint8_t id[12];             // Node ID, initialized to INVALID_NODE_ID
     bool awake;             // Awake status
     uint32_t lastAckTime;   // Last acknowledgment time
     uint8_t retryCount;     // Retry count
@@ -22,7 +20,8 @@ struct Node
 typedef enum
 {
     TX_DONE = 0,
-    RX_DONE = 1
+    RX_DONE = 1,
+	DEFAULT
 } nrf_status_t;
 
 
@@ -39,10 +38,9 @@ private:
     void receiveAckMessage(void);
     void checkNodeTimeouts(void);
     uint32_t getCurrentTime(void);
-    bool isNodeExist(uint8_t node_id);
-    void addNewNode(uint8_t node_id);
+    bool isNodeExist(uint8_t node_id[12]);
+    void addNewNode(uint8_t node_id[12]);
     void retryWakeUpNode(int nodeId);
-    void removeNode(int index);
     nrf_status_t getNrfStatus();
     void HAL_GPIO_EXTI_Callback_Tx(); // for tx interrupt
     void HAL_GPIO_EXTI_Callback_Rx(); // for rx interrupt

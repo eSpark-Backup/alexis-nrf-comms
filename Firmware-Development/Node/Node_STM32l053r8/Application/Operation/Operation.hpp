@@ -8,16 +8,14 @@
 #include "nrf24l01p.h"
 
 #define SERVER_MESSAGE "Wake"
-#define TX_DS(status) (status &= 0x20)
-#define RX_DS(status) (status &= 0x40)
 
 
 typedef enum
 {
     TX_DONE = 0,
-    RX_DONE = 1
+    RX_DONE = 1,
+	DEFAULT
 } nrf_status_t;
-
 
 class Operation
 {
@@ -27,8 +25,7 @@ private:
 	std::string message;
 	uint8_t rx_data[NRF24L01P_PAYLOAD_LENGTH] = { 0, };  // data array to be read
 
-	void handleWakeUp();
-	void handleSleep();
+
 	void generateAckMessage();
 	nrf_status_t getNrfStatus();
 	void HAL_GPIO_EXTI_Callback_Tx(); // for tx interrupt

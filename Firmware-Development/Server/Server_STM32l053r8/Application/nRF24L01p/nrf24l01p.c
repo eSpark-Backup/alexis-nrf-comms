@@ -172,7 +172,7 @@ void nrf24l01p_prx_mode()
     uint8_t new_config = read_register(NRF24L01P_REG_CONFIG);
     new_config |= 1 << 0;
 
-    write_register(NRF24L01P_REG_CONFIG, new_config);
+    write_register(NRF24L01P_REG_CONFIG, new_config);;
 }
 
 void nrf24l01p_ptx_mode()
@@ -181,6 +181,18 @@ void nrf24l01p_ptx_mode()
     new_config &= 0xFE;
 
     write_register(NRF24L01P_REG_CONFIG, new_config);
+}
+
+uint8_t get_Rx_Config()
+{
+	uint8_t config = read_register(NRF24L01P_REG_CONFIG);
+	return config & 0x01;
+}
+
+uint8_t get_Tx_Config()
+{
+	uint8_t config = read_register(NRF24L01P_REG_CONFIG);
+	return config & 0x00;
 }
 
 uint8_t nrf24l01p_read_rx_fifo(uint8_t* rx_payload)
