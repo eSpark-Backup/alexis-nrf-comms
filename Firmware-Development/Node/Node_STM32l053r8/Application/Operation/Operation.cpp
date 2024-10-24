@@ -14,25 +14,33 @@ void Operation::HAL_GPIO_EXTI_Callback_Rx()
 {
     nrf24l01p_rx_receive(rx_data);
 
+
     if (strcmp((char*)rx_data, SERVER_MESSAGE) == 0)
     {
-        nrf24l01p_tx_init(2500, _1Mbps); // Initialize to transmit ack data
-        nrf24l01p_tx_transmit(ack_msg.data()); // Send acknowledgment message back to the serve
-        nrf24l01p_rx_init(2500, _1Mbps); // Re-initialize to receive ack data
+    	Rx_Server_MSG_FLAG = true;
+       // nrf24l01p_tx_init(2500, _1Mbps); // Initialize to transmit ack data
+       // nrf24l01p_print_config_status();
+        //nrf24l01p_tx_transmit(Ack); // Send acknowledgment message back to the serve
+        //nrf24l01p_rx_init(2500, _1Mbps); // Re-initialize to receive ack data
+//        nrf24l01p_print_config_status();
     }
+//    Rx_MSG_FLAG = false;
+
 }
 
 void Operation::Rx_Tx_Callback_Handler()
 {
+
     nrf_status_t currentStatus = getNrfStatus();
 
     switch (currentStatus)
     {
-        case Transmiter:
+        case Transmitter:
             HAL_GPIO_EXTI_Callback_Tx();
             break;
 
         case Receiver:
+        	Rx_MSG_FLAG = true;
             HAL_GPIO_EXTI_Callback_Rx();
             break;
 
@@ -43,10 +51,11 @@ void Operation::Rx_Tx_Callback_Handler()
 
 nrf_status_t Operation::getNrfStatus()
 {
-    if (nrf24l01p_get_rx_tx_mode())
-    	return Receiver;
-    else
-        return Transmiter;
+    uint8_t mode = nrf24l01p_get_rx_tx_mode();
+    char setupMsg[50];
+    snprintf(setupMsg, sizeof(setupMsg), "NRF Mode: %s\n", (mode ? "Receiver" : "Transmitter"));
+    HAL_UART_Transmit(&huart2, (uint8_t*)setupMsg, strlen(setupMsg), 60);
+    return (mode ? Receiver : Transmitter);
 }
 
 void Operation::generateAckMessage()
@@ -69,11 +78,44 @@ void Operation::setup()
     generateAckMessage();
     const char *setupMsg = "Setup complete, ready to receive data.\n";
     HAL_UART_Transmit(&huart2, (uint8_t*)setupMsg, strlen(setupMsg), 100);
-    HAL_PWR_EnableSleepOnExit();
-   	HAL_PWR_EnterSLEEPMode(PWR_MAINREGULATOR_ON, PWR_SLEEPENTRY_WFI);
+//    HAL_PWR_EnableSleepOnExit();
+//   	HAL_PWR_EnterSLEEPMode(PWR_MAINREGULATOR_ON, PWR_SLEEPENTRY_WFI);
 }
 
 void Operation::loop()
 {
     // Add logic if necessary for the loop
+	// Add logic if necessary for the loop
+//	char setupMsg[20] =".";
+//    HAL_UART_Transmit(&huart2, (uint8_t*)setupMsg, strlen(setupMsg), 60);
+//        nrf24l01p_print_config_status();
+
+		if(Rx_MSG_FLAG)
+		{
+		  char setupMsg[20]= "Recieve something.\n";
+		   HAL_UART_Transmit(&huart2, (uint8_t*)setupMsg, strlen(setupMsg), 60);
+		   Rx_MSG_FLAG = false;
+		}
+
+		if(Tx_Server_MSG_FLAG)
+		{
+		  char setupMsg[20]= "Transmit ACk.\n";
+		   HAL_UART_Transmit(&huart2, (uint8_t*)setupMsg, strlen(setupMsg), 60);
+		   Tx_Server_MSG_FLAG = false;
+		}
+
+		if(Rx_Server_MSG_FLAG)
+		{
+			char setupMsg[50] = "Get Server message and send Ack\n";
+			HAL_UART_Transmit(&huart2, (uint8_t*)setupMsg, strlen(setupMsg), 60);
+			nrf24l01p_tx_init(2500, _1Mbps); // Initialize to transmit ack data
+		   // nrf24l01p_print_config_status();
+			nrf24l01p_tx_transmit(Ack); // Send acknowledgment message back to the serve
+			HAL_Delay(10);
+			nrf24l01p_rx_init(2500, _1Mbps); // Re-initialize to receive ack data
+			 Rx_Server_MSG_FLAG = false;
+		}
+
+		HAL_Delay(1000);
+		HAL_PWR_EnterSLEEPMode(PWR_MAINREGULATOR_ON, PWR_SLEEPENTRY_WFI);
 }

@@ -22,16 +22,16 @@ extern "C" {
 #define NRF24L01P_SPI                     (&hspi1)  // Keep this as is, assuming SPI1 is being used
 
 // NRF_CSN (Chip Select) on PB5
-#define NRF24L01P_SPI_CS_PIN_PORT         GPIOB
-#define NRF24L01P_SPI_CS_PIN_NUMBER       GPIO_PIN_5
+#define NRF24L01P_SPI_CS_PIN_PORT         NRF_CSN_GPIO_Port
+#define NRF24L01P_SPI_CS_PIN_NUMBER       NRF_CSN_Pin
 
 // NRF_CE (Chip Enable) on PC4
-#define NRF24L01P_CE_PIN_PORT             GPIOC
-#define NRF24L01P_CE_PIN_NUMBER           GPIO_PIN_7
+#define NRF24L01P_CE_PIN_PORT             NRF_CE_GPIO_Port
+#define NRF24L01P_CE_PIN_NUMBER           NRF_CE_Pin
 
 // NRF_INT (Interrupt pin) on PC2
-#define NRF24L01P_IRQ_PIN_PORT            GPIOC
-#define NRF24L01P_IRQ_PIN_NUMBER          GPIO_PIN_2
+#define NRF24L01P_IRQ_PIN_PORT            NRF_INT_Pin
+#define NRF24L01P_IRQ_PIN_NUMBER          NRF_INT_GPIO_Port
 
 // Keep the payload length as it is unless you want to change the size
 #define NRF24L01P_PAYLOAD_LENGTH          16     // 1 - 32 bytes
@@ -71,7 +71,7 @@ void nrf24l01p_tx_transmit(uint8_t* tx_payload);
 
 // Check tx_ds or max_rt
 void nrf24l01p_tx_irq();  
-
+void nrf24l01p_print_config_status();
 
 /* Sub Functions */
 void nrf24l01p_reset();

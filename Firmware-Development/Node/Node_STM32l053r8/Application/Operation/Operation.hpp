@@ -12,7 +12,7 @@
 
 typedef enum
 {
-    Transmiter = 0,
+	Transmitter = 0,
     Receiver = 1,
 	DEFAULT
 } nrf_status_t;
@@ -21,10 +21,13 @@ class Operation
 {
 private:
 	std::vector<uint8_t> ack_msg;
+	uint8_t Ack[8] = "Yes";
 	uint32_t uid[3];
 	std::string message;
-	uint8_t rx_data[NRF24L01P_PAYLOAD_LENGTH] = { 0, };  // data array to be read
-
+	uint8_t rx_data[NRF24L01P_PAYLOAD_LENGTH];  // data array to be read
+	bool Rx_MSG_FLAG = false;
+	bool Rx_Server_MSG_FLAG = false;
+	bool Tx_Server_MSG_FLAG = false;
 
 	void generateAckMessage();
 	nrf_status_t getNrfStatus();

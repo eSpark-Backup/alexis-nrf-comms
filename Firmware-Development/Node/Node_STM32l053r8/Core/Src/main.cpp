@@ -106,7 +106,7 @@ int main(void)
     opt.setup();
     while (1)
     {
-  //	  opt.loop();
+  	  opt.loop();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

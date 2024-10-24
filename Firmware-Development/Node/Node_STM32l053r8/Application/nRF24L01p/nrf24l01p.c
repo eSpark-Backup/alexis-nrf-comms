@@ -8,7 +8,7 @@
 
 
 #include "../../Application/nRF24L01p/nrf24l01p.h"
-
+#include "usart.h"    // Include for UART handling
 
 static void cs_high()
 {
@@ -102,12 +102,45 @@ void nrf24l01p_tx_init(channel MHz, air_data_rate bps)
     ce_high();
 }
 
+void nrf24l01p_print_config_status()
+{
+    uint8_t config = read_register(NRF24L01P_REG_CONFIG); // Read the CONFIG register
+    char msg[50];  // Buffer for messages
+
+    // Print the CONFIG register in hexadecimal format
+    snprintf(msg, sizeof(msg), "CONFIG Register: 0x%02X\r\n", config);
+    HAL_UART_Transmit(&huart2, (uint8_t*)msg, strlen(msg), 100);
+
+//    // Print the status of each bit
+//    snprintf(msg, sizeof(msg), "MASK_RX_DR: %s\r\n", (config & (1 << 7)) ? "1" : "0");
+//    HAL_UART_Transmit(&huart2, (uint8_t*)msg, strlen(msg), 100);
+//
+//    snprintf(msg, sizeof(msg), "MASK_TX_DS: %s\r\n", (config & (1 << 6)) ? "1" : "0");
+//    HAL_UART_Transmit(&huart2, (uint8_t*)msg, strlen(msg), 100);
+//
+//    snprintf(msg, sizeof(msg), "MASK_MAX_RT: %s\r\n", (config & (1 << 5)) ? "1" : "0");
+//    HAL_UART_Transmit(&huart2, (uint8_t*)msg, strlen(msg), 100);
+//
+//    snprintf(msg, sizeof(msg), "EN_CRC: %s\r\n", (config & (1 << 4)) ? "Enabled" : "Disabled");
+//    HAL_UART_Transmit(&huart2, (uint8_t*)msg, strlen(msg), 100);
+//
+//    snprintf(msg, sizeof(msg), "CRCO: %s\r\n", (config & (1 << 3)) ? "2 bytes" : "1 byte");
+//    HAL_UART_Transmit(&huart2, (uint8_t*)msg, strlen(msg), 100);
+//
+//    snprintf(msg, sizeof(msg), "PWR_UP: %s\r\n", (config & (1 << 2)) ? "Powered Up" : "Powered Down");
+//    HAL_UART_Transmit(&huart2, (uint8_t*)msg, strlen(msg), 100);
+
+    snprintf(msg, sizeof(msg), "PRIM_RX: %s\r\n", (config & 0x01) ? "RX Mode" : "TX Mode");
+    HAL_UART_Transmit(&huart2, (uint8_t*)msg, strlen(msg), 100);
+}
+
+
 void nrf24l01p_rx_receive(uint8_t* rx_payload)
 {
     nrf24l01p_read_rx_fifo(rx_payload);
     nrf24l01p_clear_rx_dr();
 
-    HAL_GPIO_TogglePin(GPIOC, NRF24L01P_SPI_CS_PIN_NUMBER);
+    HAL_GPIO_TogglePin(Led_green_GPIO_Port, Led_green_Pin);
 }
 
 void nrf24l01p_tx_transmit(uint8_t* tx_payload)
@@ -123,14 +156,14 @@ void nrf24l01p_tx_irq()
     if(tx_ds)
     {   
         // TX_DS
-        HAL_GPIO_TogglePin(GPIOC, NRF24L01P_SPI_CS_PIN_NUMBER);
+        HAL_GPIO_TogglePin(Led_green_GPIO_Port, Led_green_Pin);
         nrf24l01p_clear_tx_ds();
     }
 
     else
     {
         // MAX_RT
-        HAL_GPIO_WritePin(GPIOC, NRF24L01P_SPI_CS_PIN_NUMBER, SET);
+        HAL_GPIO_WritePin(Led_green_GPIO_Port, Led_green_Pin, SET);
         nrf24l01p_clear_max_rt();
     }
 }

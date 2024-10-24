@@ -4,7 +4,7 @@
 #include <vector>          // Include the vector header
 #include "nrf24l01p.h"
 
-#define NODE_TIMEOUT 10000
+#define NODE_TIMEOUT 50000
 #define BROADCAST_PERIOD 10000
 #define DEFAULT_NODE_QUANTITY 5
 #define MAX_RETRIES 10
@@ -19,7 +19,7 @@ struct Node
 
 typedef enum
 {
-    Transmiter = 0,
+	Transmitter = 0,
     Receiver = 1,
 	DEFAULT
 } nrf_status_t;
@@ -33,12 +33,15 @@ private:
     uint32_t lastWakeupTime = 0; // To manage wakeup message sending
     uint8_t wakeup_msg[NRF24L01P_PAYLOAD_LENGTH] = "Wake"; // Wakeup message to be sent to nodes
     char msg[150];
+    bool Tx_ACK_FLAG = false;
+    bool Rx_ACK_FLAG = false;
 
-    void wakeUpSleepingNodes();
+    void wakeUpSleepingNodes(void);
     void sendWakeupMessage(void);
     void receiveAckMessage(void);
     bool checkNodeTimeouts(void);
     uint32_t getCurrentTime(void);
+    int getActiveNodeCount(void);
     bool isNodeExist(uint8_t node_id[12]);
     void addNewNode(uint8_t node_id[12]);
     nrf_status_t getNrfStatus();
