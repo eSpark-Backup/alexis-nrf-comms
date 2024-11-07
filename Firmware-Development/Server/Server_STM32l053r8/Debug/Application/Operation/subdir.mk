@@ -4,19 +4,19 @@
 ################################################################################
 
 # Add inputs and outputs from these tool invocations to the build variables 
-CPP_SRCS += \
-../Application/Operation/Operation.cpp 
+C_SRCS += \
+../Application/Operation/Operation.c 
 
 OBJS += \
 ./Application/Operation/Operation.o 
 
-CPP_DEPS += \
+C_DEPS += \
 ./Application/Operation/Operation.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
-Application/Operation/%.o Application/Operation/%.su Application/Operation/%.cyclo: ../Application/Operation/%.cpp Application/Operation/subdir.mk
-	arm-none-eabi-g++ "$<" -mcpu=cortex-m0plus -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L053xx -c -I../Core/Inc -I../Drivers/STM32L0xx_HAL_Driver/Inc -I../Drivers/STM32L0xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L0xx/Include -I../Drivers/CMSIS/Include -I"C:/Users/Windows/Documents/Github/alexis-nrfcomms/Firmware-Development/Server/Server_STM32l053r8/Application/nRF24L01p" -I"C:/Users/Windows/Documents/Github/alexis-nrfcomms/Firmware-Development/Server/Server_STM32l053r8/Application/Operation" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" --specs=nano.specs -mfloat-abi=soft -mthumb -o "$@"
+Application/Operation/%.o Application/Operation/%.su Application/Operation/%.cyclo: ../Application/Operation/%.c Application/Operation/subdir.mk
+	arm-none-eabi-gcc "$<" -mcpu=cortex-m0plus -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L053xx -c -I../Core/Inc -I../Drivers/STM32L0xx_HAL_Driver/Inc -I../Drivers/STM32L0xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L0xx/Include -I../Drivers/CMSIS/Include -I"C:/Users/Windows/Documents/Github/alexis-nrfcomms/Firmware-Development/Server/Server_STM32l053r8/Application/Operation" -I"C:/Users/Windows/Documents/Github/alexis-nrfcomms/Firmware-Development/Server/Server_STM32l053r8/Application/nRF24L01p" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" --specs=nano.specs -mfloat-abi=soft -mthumb -o "$@"
 
 clean: clean-Application-2f-Operation
 

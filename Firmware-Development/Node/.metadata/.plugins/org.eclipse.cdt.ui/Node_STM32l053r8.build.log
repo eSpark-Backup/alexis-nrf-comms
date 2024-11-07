@@ -1,22 +1,10 @@
-19:38:19 **** Incremental Build of configuration Debug for project Node_STM32l053r8 ****
+19:51:53 **** Incremental Build of configuration Debug for project Node_STM32l053r8 ****
 make -j4 all 
-arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m0plus -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L053xx -c -I../Core/Inc -I../Drivers/STM32L0xx_HAL_Driver/Inc -I../Drivers/STM32L0xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L0xx/Include -I../Drivers/CMSIS/Include -I"C:/Users/Windows/Documents/Github/alexis-nrfcomms/Firmware-Development/Node/Node_STM32l053r8/Application/nRF24L01p" -I"C:/Users/Windows/Documents/Github/alexis-nrfcomms/Firmware-Development/Node/Node_STM32l053r8/Application/Operation" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
-arm-none-eabi-gcc "../Application/Operation/Operation.c" -mcpu=cortex-m0plus -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L053xx -c -I../Core/Inc -I../Drivers/STM32L0xx_HAL_Driver/Inc -I../Drivers/STM32L0xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L0xx/Include -I../Drivers/CMSIS/Include -I"C:/Users/Windows/Documents/Github/alexis-nrfcomms/Firmware-Development/Node/Node_STM32l053r8/Application/nRF24L01p" -I"C:/Users/Windows/Documents/Github/alexis-nrfcomms/Firmware-Development/Node/Node_STM32l053r8/Application/Operation" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Application/Operation/Operation.d" -MT"Application/Operation/Operation.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Application/Operation/Operation.o"
-../Application/Operation/Operation.c: In function 'generateAckMessage':
-../Application/Operation/Operation.c:78:12: warning: unused variable 'totalSize' [-Wunused-variable]
-   78 |     size_t totalSize = sizeof(op->uid) + strlen(op->message) + 1; // +1 for null terminator
-      |            ^~~~~~~~~
-arm-none-eabi-gcc -o "Node_STM32l053r8.elf" @"objects.list"   -mcpu=cortex-m0plus -T"C:\Users\Windows\Documents\Github\alexis-nrfcomms\Firmware-Development\Node\Node_STM32l053r8\STM32L053R8TX_FLASH.ld" -Wl,-Map="Node_STM32l053r8.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
-Finished building target: Node_STM32l053r8.elf
- 
 arm-none-eabi-size  Node_STM32l053r8.elf 
-arm-none-eabi-objdump -h -S Node_STM32l053r8.elf  > "Node_STM32l053r8.list"
    text	   data	    bss	    dec	    hex	filename
-  38732	    476	   2284	  41492	   a214	Node_STM32l053r8.elf
+  39516	    476	   2284	  42276	   a524	Node_STM32l053r8.elf
 Finished building: default.size.stdout
  
-Finished building: Node_STM32l053r8.list
- 
 
-19:38:20 Build Finished. 0 errors, 1 warnings. (took 1s.224ms)
+19:51:53 Build Finished. 0 errors, 0 warnings. (took 373ms)
 

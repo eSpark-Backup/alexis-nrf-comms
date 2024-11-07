@@ -1,5 +1,5 @@
-Application/Operation/Operation.o: ../Application/Operation/Operation.cpp \
- ../Application/Operation/Operation.hpp \
+Application/Operation/Operation.o: ../Application/Operation/Operation.c \
+ ../Application/Operation/Operation.h \
  C:/Users/Windows/Documents/Github/alexis-nrfcomms/Firmware-Development/Server/Server_STM32l053r8/Application/nRF24L01p/nrf24l01p.h \
  ../Core/Inc/spi.h ../Core/Inc/main.h \
  ../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal.h \
@@ -32,7 +32,7 @@ Application/Operation/Operation.o: ../Application/Operation/Operation.cpp \
  ../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal_uart.h \
  ../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal_uart_ex.h \
  ../Core/Inc/usart.h
-../Application/Operation/Operation.hpp:
+../Application/Operation/Operation.h:
 C:/Users/Windows/Documents/Github/alexis-nrfcomms/Firmware-Development/Server/Server_STM32l053r8/Application/nRF24L01p/nrf24l01p.h:
 ../Core/Inc/spi.h:
 ../Core/Inc/main.h:

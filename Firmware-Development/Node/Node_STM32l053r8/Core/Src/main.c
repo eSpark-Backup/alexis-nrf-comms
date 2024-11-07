@@ -106,7 +106,7 @@ int main(void)
   setup(&opt);
     while (1)
     {
-    	setup(&opt);
+    	loop(&opt);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
