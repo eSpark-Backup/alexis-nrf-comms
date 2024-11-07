@@ -1,0 +1,37 @@
+#ifndef OPERATION_H
+#define OPERATION_H
+
+#include <stdint.h>
+#include <stdbool.h>  // For bool type
+
+// Define the nrf_status_t enumeration
+typedef enum
+{
+    Transmitter = 0,
+    Receiver = 1,
+    DEFAULT
+} nrf_status_t;
+
+// Define the Operation struct
+typedef struct
+{
+    uint8_t ack_msg[256]; // Buffer for ack message, set a max size
+    uint8_t Ack[8];       // Fixed Ack message
+    uint32_t uid[3];      // Unique identifier
+    char message[64];     // Message string
+    uint8_t rx_data[16];  // Data array to be read
+    bool Rx_MSG_FLAG;      // Flag for Rx message
+    bool Rx_Server_MSG_FLAG; // Flag for server Rx message
+    bool Tx_Server_MSG_FLAG; // Flag for server Tx message
+} Operation;
+
+// Declare function prototypes for the functions that operate on Operation struct
+void generateAckMessage(Operation *op);
+nrf_status_t getNrfStatus(void);
+void HAL_GPIO_EXTI_Callback_Tx(void);
+void HAL_GPIO_EXTI_Callback_Rx(void);
+void Rx_Tx_Callback_Handler(Operation *op);
+void setup(Operation *op);
+void loop(Operation *op);
+
+#endif /* OPERATION_H */
