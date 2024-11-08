@@ -1,6 +1,8 @@
 #include "Operation.h"
-#include "spi.h"
-#include "usart.h"
+//#include "spi.h"
+//#include "usart.h"
+#include "stm32l0xx_hal_uart.h"
+extern UART_HandleTypeDef huart2;
 
 // Function to initialize the operation
 void setup(Operation *op)
