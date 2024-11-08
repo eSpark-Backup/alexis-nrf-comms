@@ -961,3 +961,24 @@ Finished building: default.size.stdout
  
 Finished building: Server_STM32l053r8.list
  
+18:18:31 **** Incremental Build of configuration Debug for project Node_STM32l053r8 ****
+make -j4 all 
+arm-none-eabi-size  Node_STM32l053r8.elf 
+   text	   data	    bss	    dec	    hex	filename
+  39516	    476	   2284	  42276	   a524	Node_STM32l053r8.elf
+Finished building: default.size.stdout
+ 
+18:18:31 **** Incremental Build of configuration Debug for project Server_STM32l053r8 ****
+make -j4 all 
+arm-none-eabi-size  Server_STM32l053r8.elf 
+   text	   data	    bss	    dec	    hex	filename
+  39332	    476	   2564	  42372	   a584	Server_STM32l053r8.elf
+Finished building: default.size.stdout
+ 
+21:20:28 **** Incremental Build of configuration Debug for project Node_STM32l053r8 ****
+make -j4 all 
+arm-none-eabi-size  Node_STM32l053r8.elf 
+   text	   data	    bss	    dec	    hex	filename
+  39516	    476	   2284	  42276	   a524	Node_STM32l053r8.elf
+Finished building: default.size.stdout
+ 
