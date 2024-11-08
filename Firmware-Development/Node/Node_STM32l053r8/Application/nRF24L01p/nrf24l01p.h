@@ -12,8 +12,12 @@
 #define __NRF24L01P_H__
 
 
-#include "spi.h"    // header from stm32cubemx code generate
+//#include "spi.h"    // header from stm32cubemx code generate
 #include <stdbool.h>
+#include <main.h>
+#include "stm32l0xx_hal_spi.h"
+
+extern SPI_HandleTypeDef hspi1;
 
 #ifdef __cplusplus
 extern "C" {

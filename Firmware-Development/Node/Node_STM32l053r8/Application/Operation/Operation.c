@@ -4,8 +4,10 @@
 #include <stdlib.h>   // For rand, srand
 #include <time.h>     // For time to seed rand
 #include "nrf24l01p.h"
-#include "spi.h"
-#include "usart.h"    // Include for UART handling
+//#include "spi.h"
+//#include "usart.h"    // Include for UART handling
+#include "stm32l0xx_hal_uart.h"
+extern UART_HandleTypeDef huart2;
 
 #define SERVER_MESSAGE "Wake"
 

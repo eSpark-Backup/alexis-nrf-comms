@@ -1,70 +1,10 @@
-19:59:18 **** Incremental Build of configuration Debug for project Server_STM32l053r8 ****
+17:50:16 **** Build of configuration Debug for project Server_STM32l053r8 ****
 make -j4 all 
-arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m0plus -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L053xx -c -I../Core/Inc -I../Drivers/STM32L0xx_HAL_Driver/Inc -I../Drivers/STM32L0xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L0xx/Include -I../Drivers/CMSIS/Include -I"C:/Users/Windows/Documents/Github/alexis-nrfcomms/Firmware-Development/Server/Server_STM32l053r8/Application/Operation" -I"C:/Users/Windows/Documents/Github/alexis-nrfcomms/Firmware-Development/Server/Server_STM32l053r8/Application/nRF24L01p" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
-arm-none-eabi-gcc "../Application/Operation/Operation.c" -mcpu=cortex-m0plus -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L053xx -c -I../Core/Inc -I../Drivers/STM32L0xx_HAL_Driver/Inc -I../Drivers/STM32L0xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L0xx/Include -I../Drivers/CMSIS/Include -I"C:/Users/Windows/Documents/Github/alexis-nrfcomms/Firmware-Development/Server/Server_STM32l053r8/Application/Operation" -I"C:/Users/Windows/Documents/Github/alexis-nrfcomms/Firmware-Development/Server/Server_STM32l053r8/Application/nRF24L01p" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Application/Operation/Operation.d" -MT"Application/Operation/Operation.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Application/Operation/Operation.o"
-../Application/Operation/Operation.c: In function 'Operation_getNrfStatus':
-../Application/Operation/Operation.c:75:5: warning: implicit declaration of function 'snprintf' [-Wimplicit-function-declaration]
-   75 |     snprintf(setupMsg, sizeof(setupMsg), "NRF Mode: %s\n", (mode ? "Receiver" : "Transmitter"));
-      |     ^~~~~~~~
-../Application/Operation/Operation.c:4:1: note: include '<stdio.h>' or provide a declaration of 'snprintf'
-    3 | #include "usart.h"
-  +++ |+#include <stdio.h>
-    4 | 
-../Application/Operation/Operation.c:75:5: warning: incompatible implicit declaration of built-in function 'snprintf' [-Wbuiltin-declaration-mismatch]
-   75 |     snprintf(setupMsg, sizeof(setupMsg), "NRF Mode: %s\n", (mode ? "Receiver" : "Transmitter"));
-      |     ^~~~~~~~
-../Application/Operation/Operation.c:75:5: note: include '<stdio.h>' or provide a declaration of 'snprintf'
-../Application/Operation/Operation.c: In function 'Operation_sendWakeupMessage':
-../Application/Operation/Operation.c:94:5: warning: incompatible implicit declaration of built-in function 'snprintf' [-Wbuiltin-declaration-mismatch]
-   94 |     snprintf(op->msg, sizeof(op->msg), "Server sends %s\n", op->wakeup_msg);
-      |     ^~~~~~~~
-../Application/Operation/Operation.c:94:5: note: include '<stdio.h>' or provide a declaration of 'snprintf'
-../Application/Operation/Operation.c: In function 'Operation_checkNodeTimeouts':
-../Application/Operation/Operation.c:124:9: warning: incompatible implicit declaration of built-in function 'snprintf' [-Wbuiltin-declaration-mismatch]
-  124 |         snprintf(msg, sizeof(msg), "Connected Nodes are: %d\n", activeNodeCount);
-      |         ^~~~~~~~
-../Application/Operation/Operation.c:124:9: note: include '<stdio.h>' or provide a declaration of 'snprintf'
-../Application/Operation/Operation.c:130:9: warning: incompatible implicit declaration of built-in function 'snprintf' [-Wbuiltin-declaration-mismatch]
-  130 |         snprintf(msg, sizeof(msg), "All Nodes are present\n");
-      |         ^~~~~~~~
-../Application/Operation/Operation.c:130:9: note: include '<stdio.h>' or provide a declaration of 'snprintf'
-../Application/Operation/Operation.c: In function 'Operation_isNodeExist':
-../Application/Operation/Operation.c:154:13: warning: incompatible implicit declaration of built-in function 'snprintf' [-Wbuiltin-declaration-mismatch]
-  154 |             snprintf(msg, sizeof(msg), "Time since last ACK for node %d: %lu ms\n", op->nodes[i].id, timeDiff);
-      |             ^~~~~~~~
-../Application/Operation/Operation.c:154:13: note: include '<stdio.h>' or provide a declaration of 'snprintf'
-../Application/Operation/Operation.c:154:71: warning: format '%d' expects argument of type 'int', but argument 4 has type 'uint8_t *' {aka 'unsigned char *'} [-Wformat=]
-  154 |             snprintf(msg, sizeof(msg), "Time since last ACK for node %d: %lu ms\n", op->nodes[i].id, timeDiff);
-      |                                                                      ~^             ~~~~~~~~~~~~~~~
-      |                                                                       |                         |
-      |                                                                       int                       uint8_t * {aka unsigned char *}
-      |                                                                      %hhn
-../Application/Operation/Operation.c: In function 'Operation_addNewNode':
-../Application/Operation/Operation.c:186:24: warning: incompatible implicit declaration of built-in function 'snprintf' [-Wbuiltin-declaration-mismatch]
-  186 |         uint16_t len = snprintf(op->msg, sizeof(op->msg), "New node added with ID: %d\n", newNode.id);
-      |                        ^~~~~~~~
-../Application/Operation/Operation.c:186:24: note: include '<stdio.h>' or provide a declaration of 'snprintf'
-../Application/Operation/Operation.c:186:85: warning: format '%d' expects argument of type 'int', but argument 4 has type 'uint8_t *' {aka 'unsigned char *'} [-Wformat=]
-  186 |         uint16_t len = snprintf(op->msg, sizeof(op->msg), "New node added with ID: %d\n", newNode.id);
-      |                                                                                    ~^     ~~~~~~~~~~
-      |                                                                                     |            |
-      |                                                                                     int          uint8_t * {aka unsigned char *}
-      |                                                                                    %hhn
-../Application/Operation/Operation.c:191:24: warning: incompatible implicit declaration of built-in function 'snprintf' [-Wbuiltin-declaration-mismatch]
-  191 |         uint16_t len = snprintf(op->msg, sizeof(op->msg), "Node limit reached!\n");
-      |                        ^~~~~~~~
-../Application/Operation/Operation.c:191:24: note: include '<stdio.h>' or provide a declaration of 'snprintf'
-arm-none-eabi-gcc -o "Server_STM32l053r8.elf" @"objects.list"   -mcpu=cortex-m0plus -T"C:\Users\Windows\Documents\Github\alexis-nrfcomms\Firmware-Development\Server\Server_STM32l053r8\STM32L053R8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Server_STM32l053r8.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
-Finished building target: Server_STM32l053r8.elf
- 
 arm-none-eabi-size  Server_STM32l053r8.elf 
-arm-none-eabi-objdump -h -S Server_STM32l053r8.elf  > "Server_STM32l053r8.list"
    text	   data	    bss	    dec	    hex	filename
   39332	    476	   2564	  42372	   a584	Server_STM32l053r8.elf
 Finished building: default.size.stdout
  
-Finished building: Server_STM32l053r8.list
- 
 
-19:59:19 Build Finished. 0 errors, 10 warnings. (took 1s.127ms)
+17:50:17 Build Finished. 0 errors, 0 warnings. (took 359ms)
 

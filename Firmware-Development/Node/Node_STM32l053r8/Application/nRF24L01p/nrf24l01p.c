@@ -8,7 +8,9 @@
 
 
 #include "../../Application/nRF24L01p/nrf24l01p.h"
-#include "usart.h"    // Include for UART handling
+//#include "usart.h"    // Include for UART handling
+#include "stm32l0xx_hal_uart.h"
+extern UART_HandleTypeDef huart2;
 
 static void cs_high()
 {
