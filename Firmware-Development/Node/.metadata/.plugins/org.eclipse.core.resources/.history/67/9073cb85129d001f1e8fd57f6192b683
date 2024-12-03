@@ -1,0 +1,42 @@
+#pragma once
+#include <cstring>
+#include <cstdio>
+#include <stdint.h>
+#include <string>
+#include <cstring> // For memcpy
+#include <vector>  // For std::vector
+#include "nrf24l01p.h"
+
+#define SERVER_MESSAGE "Wake"
+
+
+typedef enum
+{
+	Transmitter = 0,
+    Receiver = 1,
+	DEFAULT
+} nrf_status_t;
+
+class Operation
+{
+private:
+	std::vector<uint8_t> ack_msg;
+	uint8_t Ack[8] = "Yes";
+	uint32_t uid[3];
+	std::string message;
+	uint8_t rx_data[NRF24L01P_PAYLOAD_LENGTH];  // data array to be read
+	bool Rx_MSG_FLAG = false;
+	bool Rx_Server_MSG_FLAG = false;
+	bool Tx_Server_MSG_FLAG = false;
+
+	void generateAckMessage();
+	nrf_status_t getNrfStatus();
+	void HAL_GPIO_EXTI_Callback_Tx(); // for tx interrupt
+	void HAL_GPIO_EXTI_Callback_Rx(); // for rx interrupt
+
+public:
+
+	void setup();
+	void loop();
+	void Rx_Tx_Callback_Handler();
+};

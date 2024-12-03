@@ -1,0 +1,106 @@
+#include "NRF_Transceiver.hpp"
+#include "spi.h"
+#include <stdio.h>    // For printf and snprintf
+#include <stdlib.h>   // For rand, srand
+#include <time.h>     // For time to seed rand
+
+
+
+
+void NRF_Transceiver::HAL_GPIO_EXTI_Callback_Tx()
+{
+		nrf24l01p_tx_irq(); // clear interrupt flag
+}
+
+void NRF_Transceiver::HAL_GPIO_EXTI_Callback_Rx()
+{
+	nrf24l01p_rx_receive(rx_data);
+	if (strcmp((char*)rx_data, SERVER_MESSAGE) == 0)
+	{
+
+		node_current_status = _transmitter;
+		nrf24l01p_tx_init(2500, _1Mbps); // initialize it to transmit ack data
+		nrf24l01p_tx_transmit((uint8_t*)ack_msg);// Send acknowledgment message back to the server
+		nrf24l01p_rx_init(2500, _1Mbps); //again initialize it to recieve ack data
+		node_current_status = _Receiver;
+	}
+}
+
+void NRF_Transceiver::Rx_Tx_Callback_Handler()
+{
+	nrf_state currentStatus;
+    currentStatus = nrf_status();
+
+    switch (currentStatus)
+    {
+        case TX_DS_STATUS:
+            HAL_GPIO_EXTI_Callback_Tx();
+            break;
+
+        case RX_DS_STATUS:
+            HAL_GPIO_EXTI_Callback_Rx();
+            break;
+
+        default:
+            break;
+    }
+}
+
+nrf_state NRF_Transceiver::nrf_status()
+{
+	uint8_t status = nrf24l01p_get_status();
+	nrf_state currentStatus;
+	// Determine the current nrf_status based on the status
+	    if (TX_DS(status)==0x20)
+	    {
+	        return TX_DS_STATUS; // Set to TX_DS_STATUS if transmission is done
+	    }
+	    else if (RX_DS(status)==0x40)
+	    {
+	        return RX_DS_STATUS; // Set to RX_DS_STATUS if reception is done
+	    }
+}
+
+void NRF_Transceiver::handleWakeUp()
+{
+	  printf("Yes, I am awake!\n");
+}
+
+void NRF_Transceiver::handleSleep()
+{
+    // Perform actions when the system is in sleep mode
+	printf("Now,Fall to Sleep!\n");
+    HAL_PWR_EnterSLEEPMode(PWR_LOWPOWERREGULATOR_ON, PWR_SLEEPENTRY_WFI);
+}
+
+void NRF_Transceiver::generateAckMessage(char *uidString, size_t size)
+{
+	// Get the UID values
+	uid[0] = HAL_GetUIDw0();
+	uid[1] = HAL_GetUIDw1();
+	uid[2] = HAL_GetUIDw2();
+
+	// Format the UID into a string
+	snprintf(uidString, size, "%08X%08X%08X", uid[0], uid[1], uid[2]);
+
+}
+
+void NRF_Transceiver::setup()
+{
+	nrf24l01p_rx_init(2500, _1Mbps); //initialize it to recieve ack data
+	generateAckMessage(ack_msg, sizeof(ack_msg));
+	HAL_PWR_EnableSleepOnExit();
+}
+
+void NRF_Transceiver::loop()
+{
+	switch (node_current_status)
+	{
+		case _transmitter:
+			handleWakeUp();
+			break;
+		case _Receiver:
+			handleSleep();
+			break;
+	}
+}

@@ -1,0 +1,14 @@
+../Application/Operation/Operation.c:8:6:setup	16	static
+../Application/Operation/Operation.c:15:6:loop	88	static
+../Application/Operation/Operation.c:39:6:Operation_HAL_GPIO_EXTI_Callback_Tx	16	static
+../Application/Operation/Operation.c:46:6:Operation_HAL_GPIO_EXTI_Callback_Rx	16	static
+../Application/Operation/Operation.c:53:6:Rx_Tx_Callback_Handler	32	static
+../Application/Operation/Operation.c:73:14:Operation_getNrfStatus	80	static
+../Application/Operation/Operation.c:83:6:Operation_wakeUpSleepingNodes	16	static
+../Application/Operation/Operation.c:94:6:Operation_sendWakeupMessage	24	static
+../Application/Operation/Operation.c:107:6:Operation_receiveAckMessage	40	static
+../Application/Operation/Operation.c:119:6:Operation_checkNodeTimeouts	128	static
+../Application/Operation/Operation.c:141:10:Operation_getCurrentTime	16	static
+../Application/Operation/Operation.c:147:6:Operation_isNodeExist	96	static
+../Application/Operation/Operation.c:176:6:Operation_addNewNode	56	static
+../Application/Operation/Operation.c:199:5:Operation_getActiveNodeCount	24	static

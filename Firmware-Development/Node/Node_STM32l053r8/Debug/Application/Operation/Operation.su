@@ -1,0 +1,7 @@
+../Application/Operation/Operation.c:19:6:HAL_GPIO_EXTI_Callback_Tx	8	static
+../Application/Operation/Operation.c:24:6:HAL_GPIO_EXTI_Callback_Rx	16	static
+../Application/Operation/Operation.c:38:6:Rx_Tx_Callback_Handler	32	static
+../Application/Operation/Operation.c:63:14:getNrfStatus	72	static
+../Application/Operation/Operation.c:72:6:generateAckMessage	24	static
+../Application/Operation/Operation.c:85:6:setup	24	static
+../Application/Operation/Operation.c:93:6:loop	128	static

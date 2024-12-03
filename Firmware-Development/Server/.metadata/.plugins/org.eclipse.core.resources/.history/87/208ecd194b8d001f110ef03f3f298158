@@ -1,0 +1,81 @@
+#include "NRF_Transceiver.hpp"
+#include "spi.h"
+#include <stdio.h>    // For printf and snprintf
+#include <stdlib.h>   // For rand, srand
+#include <time.h>     // For time to seed rand
+
+void NRF_Transceiver::HAL_GPIO_EXTI_Callback_Tx(uint16_t GPIO_Pin)
+{
+	if(GPIO_Pin == NRF24L01P_IRQ_PIN_NUMBER)
+		nrf24l01p_tx_irq(); // clear interrupt flag
+}
+
+void NRF_Transceiver::HAL_GPIO_EXTI_Callback_Rx(uint16_t GPIO_Pin)
+{
+    if (GPIO_Pin == NRF24L01P_IRQ_PIN_NUMBER)
+    {
+        nrf24l01p_rx_receive(rx_data);
+        if (strcmp((char*)rx_data, SERVER_MESSAGE) == 0)
+        {
+
+            node_current_status = _WakeUp;
+            nrf24l01p_tx_init(2500, _1Mbps); // initialize it to transmit ack data
+            nrf24l01p_tx_transmit(ack_msg);// Send acknowledgment message back to the server
+            nrf24l01p_rx_init(2500, _1Mbps); //again initialize it to recieve ack data
+        }
+    }
+}
+
+void NRF_Transceiver::handleWakeUp()
+{
+	  printf("Yes, I am awake!\n");
+}
+
+void NRF_Transceiver::handleSleep()
+{
+    // Perform actions when the system is in sleep mode
+	HAL_PWR_EnableSleepOnExit();
+    HAL_PWR_EnterSLEEPMode(PWR_LOWPOWERREGULATOR_ON, PWR_SLEEPENTRY_WFI);
+    printf("Now,Fall to Sleep!\n");
+}
+
+void NRF_Transceiver::generateAckMessage(char* ack_msg)
+{
+    // Seed the random number generator (only once)
+    srand(time(NULL));
+
+    // Generate a random node ID (between 1 and 255)
+    uint8_t node_id = rand() % 255 + 1;   // Ensures node_id is between 1 and 255
+
+    // Generate random values (e.g., temperature, humidity, status, etc.)
+    float value1 = (rand() % 1000) / 10.0;  // Random float between 0 and 99.9
+    float value2 = (rand() % 1000) / 10.0;
+    int status = rand() % 10;               // Random status between 0 and 9
+    float value3 = (rand() % 10000) / 100.0; // Random float between 0 and 999.9
+    int flag = rand() % 2;                  // Random flag (0 or 1)
+
+    // Format the ack message as a comma-separated string with random node ID
+    snprintf(ack_msg, 20, "%d,%.1f,%.1f,%d,%.1f,%d", node_id, value1, value2, status, value3, flag);
+
+    // The result will look like: "123,25.4,50.4,2,100.2,1" with random node ID
+}
+
+void NRF_Transceiver::setup()
+{
+	nrf24l01p_rx_init(2500, _1Mbps); //initialize it to recieve ack data
+	generateAckMessage(ack_msg);
+	printf("Generated ACK message: %s\n", ack_msg);
+}
+
+void NRF_Transceiver::loop()
+{
+	switch (node_current_status)
+	{
+		case _WakeUp:
+			handleWakeUp();
+			break;
+		case _Sleep:
+			handleSleep();
+			break;
+	}
+}

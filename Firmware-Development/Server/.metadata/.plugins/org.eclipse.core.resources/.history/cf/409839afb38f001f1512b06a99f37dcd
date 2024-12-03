@@ -1,0 +1,46 @@
+#pragma once
+#include <cstring>
+#include <cstdio>
+#include "nrf24l01p.h"
+
+#define SERVER_MESSAGE "Wake"
+#define TX_DS(status) (status &= 0x20)
+#define RX_DS(status) (status &= 0x40)
+
+
+typedef enum
+{
+    _transmitter  = 0,
+    _Receiver  = 1
+
+} node_status;
+
+typedef enum
+{
+    TX_DONE = 0, // Transmit done status
+    RX_DONE = 1  // Receive done status
+} nrf_status_t;
+
+
+class NRF_Transceiver
+{
+private:
+	char ack_msg[25]; // Message to send back to the server
+	uint32_t uid[3];
+	uint8_t rx_data[NRF24L01P_PAYLOAD_LENGTH] = { 0, };  // data array to be read
+
+	void handleWakeUp();
+	void handleSleep();
+	void generateAckMessage(char *uidString, size_t size);
+	nrf_status_t getNrfStatus();
+	void HAL_GPIO_EXTI_Callback_Tx(); // for tx interrupt
+	void HAL_GPIO_EXTI_Callback_Rx(); // for rx interrupt
+
+public:
+	//node status
+	node_status node_current_status = _Receiver;
+
+	void setup();
+	void loop();
+	void Rx_Tx_Callback_Handler();
+};

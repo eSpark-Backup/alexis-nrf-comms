@@ -1,0 +1,187 @@
+#include "Operation.hpp"
+#include "spi.h"
+#include "usart.h"
+
+void Operation::setup()
+{
+	 nrf24l01p_tx_init(2500, _1Mbps);// Re-initialize to Transmit data
+	 sendWakeupMessage();
+}
+
+bool Operation::loop()
+{
+    wakeUpSleepingNodes();
+    if(Tx_ACK_FLAG)
+	{
+		char setupMsg[50] = "Transmited.....\n";
+		HAL_UART_Transmit(&huart2, (uint8_t*)setupMsg, strlen(setupMsg), 60);
+		 nrf24l01p_rx_init(2500, _1Mbps); // initialize to receive ack data
+		Tx_ACK_FLAG = false;
+	}
+    if(Rx_ACK_FLAG)
+   	{
+   		char setupMsg[50] = "Waiting to Receive.....\n";
+   		HAL_UART_Transmit(&huart2, (uint8_t*)setupMsg, strlen(setupMsg), 60);
+   		Rx_ACK_FLAG = false;
+   	}
+    if(checkNodeTimeouts())
+    	return true;
+    return false;
+
+    HAL_Delay(1000);
+}
+
+void Operation::HAL_GPIO_EXTI_Callback_Tx()
+{
+	Tx_ACK_FLAG = true;
+    nrf24l01p_tx_irq(); // clear interrupt flag
+}
+
+void Operation::HAL_GPIO_EXTI_Callback_Rx()
+{
+	Rx_ACK_FLAG = true;
+        receiveAckMessage();
+}
+
+void Operation::Rx_Tx_Callback_Handler()
+{
+    nrf_status_t currentStatus = getNrfStatus();
+
+    switch (currentStatus)
+    {
+        case Transmitter:
+            HAL_GPIO_EXTI_Callback_Tx();
+            break;
+
+        case Receiver:
+            HAL_GPIO_EXTI_Callback_Rx();
+            break;
+
+        default:
+            break;
+    }
+}
+
+nrf_status_t Operation::getNrfStatus()
+{
+    uint8_t mode = nrf24l01p_get_rx_tx_mode();
+    char setupMsg[50];
+    snprintf(setupMsg, sizeof(setupMsg), "NRF Mode: %s\n", (mode ? "Receiver" : "Transmitter"));
+    HAL_UART_Transmit(&huart2, (uint8_t*)setupMsg, strlen(setupMsg), 60);
+    return (mode ? Receiver : Transmitter);
+}
+
+void Operation::wakeUpSleepingNodes()
+{
+    if (getCurrentTime() - lastWakeupTime > BROADCAST_PERIOD)  //Time Difference between 1st and 2nd broadcast will be 10sec and during this period device will be receiving data from nodes
+    {
+        nrf24l01p_tx_init(2500, _1Mbps);// Re-initialize to Transmit data
+        sendWakeupMessage();
+        lastWakeupTime = getCurrentTime();
+    }
+}
+
+void Operation::sendWakeupMessage(void)
+{
+    snprintf(msg, sizeof(msg), "Server send %s\n", wakeup_msg);  // Format message to include wakeup_msg
+    HAL_UART_Transmit(&huart2, (uint8_t*)msg, strlen(msg), 100);
+    nrf24l01p_tx_transmit(wakeup_msg);
+   // nrf24l01p_print_config_status();
+    HAL_Delay(100);
+
+    nrf24l01p_rx_init(2500, _1Mbps); // initialize to receive ack data
+  //  nrf24l01p_print_config_status();
+    HAL_Delay(100);
+}
+
+void Operation::receiveAckMessage(void)
+{
+    uint8_t rx_data[32];
+    nrf24l01p_rx_receive(rx_data);
+
+    if (!isNodeExist(rx_data))
+    {
+        addNewNode(rx_data);
+    }
+}
+
+bool Operation::checkNodeTimeouts(void)
+{
+    uint32_t currentTime = getCurrentTime();
+    nodeCount = 0;
+    char msg[100];
+
+    for (size_t i = 0; i < nodes.size(); i++)
+    {
+        if (nodes[i].awake)
+            nodeCount++;
+        else
+        {
+			snprintf(msg, sizeof(msg), "Node ID: %d, error: \n", nodes[i].id);
+			HAL_UART_Transmit(&huart2, (uint8_t*)msg, strlen(msg), 100);
+			nodeCount--;
+			if(nodeCount-- < 0)
+				nodeCount =0;
+        }
+    }
+
+    if (nodeCount <= DEFAULT_NODE_QUANTITY)
+    {
+        snprintf(msg, sizeof(msg), "Connected Nodes are: %d\n", nodeCount);
+        HAL_UART_Transmit(&huart2, (uint8_t*)msg, strlen(msg), 100);
+        HAL_Delay(1000);
+    }
+    else
+    {
+        snprintf(msg, sizeof(msg), "All Nodes are present\n");
+        HAL_UART_Transmit(&huart2, (uint8_t*)msg, strlen(msg), 100);
+        return true;
+    }
+
+    return false;
+}
+
+uint32_t Operation::getCurrentTime(void)
+{
+    return HAL_GetTick();
+}
+
+bool Operation::isNodeExist(uint8_t node_id[12])
+{
+	for (size_t i = 0; i < nodes.size(); i++)
+    {
+		if (memcmp(nodes[i].id, node_id, sizeof(nodes[i].id)) == 0)
+        {
+			if(getCurrentTime() - nodes[i].lastAckTime > NODE_TIMEOUT)
+			{
+			   nodes[i].awake = false;
+
+			}
+			else
+			{
+				nodes[i].awake = true;
+				nodes[i].lastAckTime = getCurrentTime();
+			}
+            // Node exists, update its state and ack time
+            return true;
+        }
+    }
+    return false;
+}
+
+void Operation::addNewNode(uint8_t node_id[12])
+{
+
+    Node newNode;
+	memcpy(newNode.id, node_id, sizeof(newNode.id));
+    newNode.awake = true;
+    newNode.lastAckTime = getCurrentTime();
+    newNode.retryCount = 0;
+
+    nodes.push_back(newNode);
+
+    uint16_t len = snprintf(msg, sizeof(msg), "New node added with ID: %u %u %u\n", node_id[0], node_id[1], node_id[2]);
+    HAL_UART_Transmit(&huart2, (uint8_t*)msg, len, 100);
+}
+
+

@@ -1,0 +1,7 @@
+C:/Users/Windows/Documents/Github/alexis-nrfcomms/Firmware-Development/Node/Node_STM32l053r8/Application/Operation/Operation.hpp:26:7:Operation::Operation()	1
+../Core/Src/main.cpp:72:5:int main()	1
+../Core/Src/main.cpp:119:6:void SystemClock_Config()	3
+../Core/Src/main.cpp:158:6:void HAL_GPIO_EXTI_Callback(uint16_t)	2
+../Core/Src/main.cpp:171:6:void Error_Handler()	1
+../Core/Src/main.cpp:180:1:void __static_initialization_and_destruction_0(int, int)	3
+../Core/Src/main.cpp:180:1:cpp)	1

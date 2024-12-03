@@ -1,0 +1,10 @@
+21:20:28 **** Incremental Build of configuration Debug for project Node_STM32l053r8 ****
+make -j4 all 
+arm-none-eabi-size  Node_STM32l053r8.elf 
+   text	   data	    bss	    dec	    hex	filename
+  39516	    476	   2284	  42276	   a524	Node_STM32l053r8.elf
+Finished building: default.size.stdout
+ 
+
+21:20:29 Build Finished. 0 errors, 0 warnings. (took 456ms)
+

@@ -1,0 +1,42 @@
+#pragma once
+#include <cstring>
+#include <cstdio>
+#include <vector>          // Include the vector header
+#include "nrf24l01p.h"
+
+#define NODE_TIMEOUT 10000
+#define INVALID_NODE_ID 255
+#define MAX_RETRIES 10
+
+struct Node {
+    uint8_t id;             // Node ID, initialized to INVALID_NODE_ID
+    bool awake;             // Awake status
+    uint32_t lastAckTime;   // Last acknowledgment time
+    uint8_t retryCount;     // Retry count
+};
+
+class NRF_Server_Transceiver
+{
+private:
+    std::vector<Node> nodes; // Use vector for dynamic sizing
+    uint32_t lastWakeupTime = 0; // To manage wakeup message sending
+    uint8_t wakeup_msg[NRF24L01P_PAYLOAD_LENGTH] = "Wake"; // Wakeup message to be sent to nodes
+
+    void wakeUpSleepingNodes();
+    void sendWakeupMessage(void);
+    void receiveAckMessage(void);
+    void checkNodeTimeouts(void);
+    uint32_t getCurrentTime(void);
+    bool isNodeExist(uint8_t node_id);
+    void addNewNode(uint8_t node_id);
+    void retryWakeUpNode(int nodeId);
+    void removeNode(int index);
+    void HAL_GPIO_EXTI_Callback_Tx(); // for tx interrupt
+    void HAL_GPIO_EXTI_Callback_Rx(); // for rx interrupt
+
+public:
+
+    void setup();
+    void loop();
+    void Rx_Tx_Callback_Handler();
+};

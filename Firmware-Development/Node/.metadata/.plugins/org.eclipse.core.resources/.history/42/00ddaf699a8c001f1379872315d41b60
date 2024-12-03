@@ -1,0 +1,45 @@
+#pragma once
+#include <cstring>
+#include <cstdio>
+#include "nrf24l01p.h"
+
+#define MAX_NODES 10
+#define NODE_TIMEOUT 10000  // Time in ms
+#define INVALID_NODE_ID 255  // Define an invalid ID for uninitialized nodes
+#define MAX_RETRIES 10  // Define an invalid ID for uninitialized nodes
+
+struct Node {
+    uint8_t id;  // Node ID, initialized to INVALID_NODE_ID
+    bool awake;  // Awake status
+    uint32_t lastAckTime;  // Last acknowledgment time
+    uint8_t retryCount;  // Retry count
+};
+
+
+
+class NRF_Transceiver
+{
+private:
+
+	Node nodes[MAX_NODES];       // Array to track nodes
+	uint32_t lastWakeupTime = 0; // To manage wakeup message sending
+	uint8_t wakeup_msg[] = "Wakeup"; // Wakeup message to be sent to nodes
+
+	void HAL_GPIO_EXTI_Callback_Tx(uint16_t GPIO_Pin); // for tx interrupt
+	void HAL_GPIO_EXTI_Callback_Rx(uint16_t GPIO_Pin); // for rx interrupt
+	void setupNodeEnvironment();
+	void wakeUpSleepingNodes();
+	void sendWakeupMessage(void);
+	void receiveAckMessage(void);
+	void checkNodeTimeouts(void);
+	uint32_t getCurrentTime(void);
+	bool isNodeExist();
+	void addNewNode();
+	void retryWakeUpNode(int nodeId);
+	void removeNode(int index);
+
+public:
+
+	void setup();
+	void loop();
+};
