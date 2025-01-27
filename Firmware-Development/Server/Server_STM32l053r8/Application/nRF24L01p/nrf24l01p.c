@@ -57,7 +57,7 @@ static uint8_t write_register(uint8_t reg, uint8_t value)
     HAL_SPI_Transmit(NRF24L01P_SPI, &write_val, 1, 2000);
     cs_high();
 
-    return write_val;
+    return status;
 }
 
 

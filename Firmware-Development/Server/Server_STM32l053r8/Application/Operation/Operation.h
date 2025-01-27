@@ -10,11 +10,12 @@
 #define BROADCAST_PERIOD 10000
 #define DEFAULT_NODE_QUANTITY 5
 #define MAX_RETRIES 10
+#define ID_LENGTH 12
 
 // Define the Node structure
 typedef struct
 {
-    uint8_t id[12];             // Node ID
+    uint8_t id[ID_LENGTH];      // Node ID                  // use 6bytes instead of 12 to store mac address?
     bool awake;                 // Awake status
     uint32_t lastAckTime;       // Last acknowledgment time
     uint8_t retryCount;         // Retry count
@@ -31,7 +32,7 @@ typedef enum
 typedef struct
 {
     Node nodes[DEFAULT_NODE_QUANTITY];  // Fixed array for simplicity, replace with dynamic if needed
-    int nodeCount;                      // Node count
+    uint8_t nodeCount;                  // Node count
     uint32_t lastWakeupTime;            // Last wakeup time
     uint8_t wakeup_msg[NRF24L01P_PAYLOAD_LENGTH]; // Wakeup message
     char msg[150];                      // Message buffer
@@ -50,8 +51,8 @@ void Operation_receiveAckMessage(Operation *op);
 bool Operation_checkNodeTimeouts(Operation *op);
 uint32_t Operation_getCurrentTime(Operation *op);
 int Operation_getActiveNodeCount(Operation *op);
-bool Operation_isNodeExist(Operation *op, uint8_t node_id[12]);
-void Operation_addNewNode(Operation *op, uint8_t node_id[12]);
+bool Operation_isNodeExist(Operation *op, uint8_t node_id[ID_LENGTH]);
+void Operation_addNewNode(Operation *op, uint8_t node_id[ID_LENGTH]);
 void Operation_HAL_GPIO_EXTI_Callback_Tx(Operation *op);
 void Operation_HAL_GPIO_EXTI_Callback_Rx(Operation *op);
 

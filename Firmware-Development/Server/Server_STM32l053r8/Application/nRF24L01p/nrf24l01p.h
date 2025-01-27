@@ -38,7 +38,7 @@ extern "C" {
 #define NRF24L01P_IRQ_PIN_NUMBER          NRF_INT_GPIO_Port
 
 // Keep the payload length as it is unless you want to change the size
-#define NRF24L01P_PAYLOAD_LENGTH          16     // 1 - 32 bytes
+#define NRF24L01P_PAYLOAD_LENGTH          16     // 1 - 32 bytes            23?
 
 
 

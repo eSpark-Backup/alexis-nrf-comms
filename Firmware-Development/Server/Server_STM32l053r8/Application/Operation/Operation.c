@@ -90,6 +90,38 @@ void Operation_wakeUpSleepingNodes(Operation *op)
     }
 }
 
+
+void send_uint32_as_string(UART_HandleTypeDef *huart, uint32_t data) {
+    char buffer[12];
+
+    sprintf(buffer, "%lu", data);
+
+    if (HAL_UART_Transmit(huart, (uint8_t *)buffer, strlen(buffer), HAL_MAX_DELAY) != HAL_OK) {
+        Error_Handler();
+    }
+
+    char newline[] = "\r\n";
+    HAL_UART_Transmit(huart, (uint8_t *)newline, strlen(newline), HAL_MAX_DELAY);
+}
+
+void combine_data(uint32_t var1[3], const char* msg, uint8_t final[32]) {
+    memset(final, 0, 32);
+
+    for (int i = 0; i < 3; i++) {
+        final[i * 4]     = (var1[i] >> 24) & 0xFF;
+        final[i * 4 + 1] = (var1[i] >> 16) & 0xFF;
+        final[i * 4 + 2] = (var1[i] >> 8) & 0xFF;
+        final[i * 4 + 3] = var1[i] & 0xFF;
+    }
+
+    size_t msgLength = strlen(msg);
+    if (msgLength > 20) {
+        msgLength = 20;
+    }
+    memcpy(&final[12], msg, msgLength);
+}
+
+
 // Function to send wake-up message
 void Operation_sendWakeupMessage(Operation *op)
 {
@@ -144,7 +176,7 @@ uint32_t Operation_getCurrentTime(Operation *op)
 }
 
 // Function to check if the node exists
-bool Operation_isNodeExist(Operation *op, uint8_t node_id[12])
+bool Operation_isNodeExist(Operation *op, uint8_t node_id[ID_LENGTH])
 {
     char msg[50];
 
@@ -173,7 +205,7 @@ bool Operation_isNodeExist(Operation *op, uint8_t node_id[12])
 }
 
 // Function to add a new node
-void Operation_addNewNode(Operation *op, uint8_t node_id[12])
+void Operation_addNewNode(Operation *op, uint8_t node_id[ID_LENGTH])
 {
     if (op->nodeCount < DEFAULT_NODE_QUANTITY)
     {

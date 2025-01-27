@@ -104,14 +104,14 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   setup(&opt);
-    while (1)
-    {
-  	  if(loop(&opt))
-  		  break;
-    /* USER CODE END WHILE */
+  while (1)
+  {
+    if(loop(&opt))
+      break;
+  /* USER CODE END WHILE */
 
-    /* USER CODE BEGIN 3 */
-    }
+  /* USER CODE BEGIN 3 */
+  }
   /* USER CODE END 3 */
 }
 
@@ -331,9 +331,9 @@ static void MX_GPIO_Init(void)
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
 	if (GPIO_Pin == NRF_IRQ_PIN)
-	  {
+  {
 		Rx_Tx_Callback_Handler(&opt);
-	  }
+  }
 }
 /* USER CODE END 4 */
 
